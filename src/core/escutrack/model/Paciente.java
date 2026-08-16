@@ -23,15 +23,17 @@ public class Paciente {
 	private int nivelGravedad;
 	private String idCamaAsignada;
 	
-	LocalDateTime fechaIngreso;
-	LocalDateTime fechaEgreso;
+	private LocalDateTime fechaIngreso;
+	private LocalDateTime fechaEgreso;
 	 
 	
-	public Paciente (String rut, String nombre, String gradoGravedad){
+	public Paciente (String rut, String nombre, String gradoGravedad,LocalDateTime fechaIngreso){
 		this.rut = rut;
 		this.nombre= nombre;
 		this.nivelGravedad= parseGradoGravedad(gradoGravedad);
 		this.idCamaAsignada= null;
+		this.fechaIngreso = fechaIngreso;
+		this.fechaEgreso = null;
 	}
 	
 	/* +++
@@ -44,7 +46,7 @@ public class Paciente {
 	 * la fecha y ahora a la que el paciente ingresó al establecimiento, cuándo se
 	 * dió de alta y cuándo quedó disponible la cama que se le fue asignada.
 	 * 
-	 * AGREGADO por Jonathan 
+	 * 
 	 --- */
 	private static final Map<String, Integer> ESTADO_CLINICO = Map.of("indefinido",0, "estable",1, "moderado",2, "urgente",3, "severo",4, "critico",5);
 	
@@ -56,6 +58,19 @@ public class Paciente {
 			throw new IllegalArgumentException("Nivel de gravedad desconocido: " + nivelGravedad);
 		}
 		return nivelGravedad;
+	}
+	
+	@Override
+	public String toString() { //SIA 6	
+	    return "Nombre: " + nombre + "\n" +
+	           "Estado: " + nivelGravedad + "\n" +
+	           "RUT: " + rut + "\n" +
+	           "Cama asignada: " + idCamaAsignada +
+	           "Fecha de ingreso" + fechaIngreso + "\n" + 
+	           "Fecha de egreso" + fechaEgreso;
+	           
+	           
+	           
 	}
 	
 	

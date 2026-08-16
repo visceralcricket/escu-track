@@ -1,6 +1,8 @@
 package core.escutrack.controller;
 
 import core.escutrack.model.Paciente;
+
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,8 +29,9 @@ public class ControladorHospital {
 		// inicializarDatos();
 	}
 	
-	public void registrarPaciente(String rut, String nombre, String gradoGravedad, String departamento, String idCama) {
-		Paciente nuevoPaciente = new Paciente(rut, nombre, gradoGravedad);
+	public void registrarPaciente(String rut, String nombre, String gradoGravedad, String departamento, String idCama, LocalDateTime fechaIngreso) 
+	{ 
+		Paciente nuevoPaciente = new Paciente(rut, nombre, gradoGravedad, fechaIngreso);
 		nuevoPaciente.setIdCamaAsignada(idCama);
 		
 		// Si el departamento no existe, lo creamos
@@ -40,4 +43,48 @@ public class ControladorHospital {
 		this.mapaDepartamentos.get(departamento).put(idCama, nuevoPaciente);
 	}
 	
-}
+	
+	
+	
+	public void eliminarPaciente(String idCama, String departamento) {  
+	    Map<String, Paciente> pacientesDelDepartamento = this.mapaDepartamentos.get(departamento);
+	    
+	    if (pacientesDelDepartamento != null) {
+	    	
+	        if (pacientesDelDepartamento.get(idCama) != null) {
+	        	
+	            pacientesDelDepartamento.remove(idCama);
+	            
+	        } else {
+	            System.out.println("Ingrese un idCama válido");
+	        }
+	    } else {
+	    	
+	        System.out.println("Ingrese un departamento válido");
+	    }
+	     
+	}
+	
+	 public void mostrarPaciente(String idCama, String departamento) 
+	 {
+		 Map<String, Paciente> pacientesDelDepartamento  = this.mapaDepartamentos.get(departamento);
+		 if (pacientesDelDepartamento  != null) {
+		    	Paciente paciente = pacientesDelDepartamento.get(idCama);
+		        if (paciente != null) {
+		        	System.out.println(paciente);
+		        	
+		        } else {
+		            System.out.println("Ingrese un idCama válido");
+		        }
+		    } else {
+		    	
+		        System.out.println("Ingrese un departamento válido");
+		    }
+	 	}
+	 
+	 // METODO PARA MOSTRAR TODOS LOS PACIENTES DE UNA CAMA
+	 //...
+
+	 }
+	 
+	

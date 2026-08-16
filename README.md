@@ -61,6 +61,9 @@
 + Script `extract_version.bat` creado para transmitir el número de versión actual del sistema al ciclo principal del mismo en `Main.java`
 + Front-end básico en `Main.java`.
 + Añadido paquete `src/ core.escutrack.resources` que contiene el archivo `version.txt` donde se almacena el número de versión del programa *EscuTrack*.
++Metodos para eliminar y mostrar paciente.
++Parametros para fecha de ingreso y egreso para cada paciente.
++ Creacion de la clase cama.
 
 ## [0.1.0] - 2026-08-16
 > Implementadas entidades principales y funcionalidades clave.
