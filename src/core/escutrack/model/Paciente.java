@@ -1,10 +1,10 @@
 package core.escutrack.model;
 
 import java.util.Map;
-/* import java.time.LocalDate;
- * import java.time.DateTimeFormatter;
- * 
- */
+
+import java.time.LocalDateTime;
+  
+ 
 
 /* +++
  * Este código de aquí contiene la entidad Paciente, su constructor y distintas funcionalidades
@@ -22,10 +22,10 @@ public class Paciente {
 	private String nombre;
 	private int nivelGravedad;
 	private String idCamaAsignada;
-	/*
-	 * tipoVariable horaIngreso;
-	 * tipoVariable horaEgreso;
-	 */
+	
+	LocalDateTime fechaIngreso;
+	LocalDateTime fechaEgreso;
+	 
 	
 	public Paciente (String rut, String nombre, String gradoGravedad){
 		this.rut = rut;
@@ -43,6 +43,8 @@ public class Paciente {
 	 * Como punto extra, considerar añadir una variable de tipo date para almacenar
 	 * la fecha y ahora a la que el paciente ingresó al establecimiento, cuándo se
 	 * dió de alta y cuándo quedó disponible la cama que se le fue asignada.
+	 * 
+	 * AGREGADO por Jonathan 
 	 --- */
 	private static final Map<String, Integer> ESTADO_CLINICO = Map.of("indefinido",0, "estable",1, "moderado",2, "urgente",3, "severo",4, "critico",5);
 	
@@ -68,5 +70,12 @@ public class Paciente {
 	
 	public String getIdCamaAsignada() {return this.idCamaAsignada;}
 	public void setIdCamaAsignada(String idCamaAsignada) {this.idCamaAsignada = idCamaAsignada;}
+	
+	public LocalDateTime getFechaIngreso() {return fechaIngreso;}
+	public void setFechaIngreso(LocalDateTime fechaIngreso) {this.fechaIngreso = fechaIngreso;}
+	
+	public LocalDateTime getFechaEgreso() {return fechaEgreso;}
+	public void setFechaEgreso(LocalDateTime fechaEgreso) {this.fechaEgreso = fechaEgreso;}
+	
 	
 }
