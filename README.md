@@ -69,7 +69,3 @@
 + **Entidad `Paciente`:** Implementado mediante encapsulamiento estricto: atributos clínicos, parseo automatizado de grado de gravedad (String a Integer) utilizando `HashMap`.
 + **Entidad `ControladorHospital`:** Configuración del nivel de gestión con mapas anidados del JCF (`Map<String, Map<String, Paciente>>`) para el rastreo espacial (departamento -> idCama -> Paciente).
 + **Esqueleto `Main`:** Estructura inicial del `BufferedReader` para la lectura del flujo de entrada en consola.
-
-
-
-ESTE ES UN TEXTO DE PRUEBAa
