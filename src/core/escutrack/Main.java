@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.IOException;
 
 public class Main {
+	
 	static BufferedReader lector = new BufferedReader(new InputStreamReader(System.in)); // de esta forma se puede usar la variable lector en cualquier parte
 	
 	public static void main(String[] args) throws IOException {
