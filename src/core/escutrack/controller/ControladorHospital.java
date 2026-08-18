@@ -29,6 +29,8 @@ public class ControladorHospital {
 		// inicializarDatos();
 	}
 	
+	// Considerar sobrecarga de métodos aquí con un registrarPaciente sin parámetros.
+	
 	public void registrarPaciente(String rut, String nombre, String gradoGravedad, String departamento, String idCama, LocalDateTime fechaIngreso) 
 	{ 
 		Paciente nuevoPaciente = new Paciente(rut, nombre, gradoGravedad, fechaIngreso);
@@ -43,8 +45,19 @@ public class ControladorHospital {
 		this.mapaDepartamentos.get(departamento).put(idCama, nuevoPaciente);
 	}
 	
-	
-	
+	/* +++
+	 * FIXME: Toda esta sección de código hacia abajo viola el patrón de MVC
+	 * > modelo, vista, controlador.
+	 * Este módulo/archivo únicamente se encarga del modelado, no de tratar con
+	 * los posibles errores y casos extremos/inválidos, todo lo mencionado debería
+	 * ser manejado en el front-end (Hospital.java), no aquí.
+	 * 
+	 * TODO: Remover TODAS las operaciones de I/O de texto como System.out.println y 
+	 * delegar todas esas responsabilidades de UX (experiencia de usuario) a Hospital.java
+	 * o a algún otro archivo externo nuevo de renderizado.
+	 * 
+	 *  @author Felipe T.S
+	 --- */
 	
 	public void eliminarPaciente(String idCama, String departamento) {  
 	    Map<String, Paciente> pacientesDelDepartamento = this.mapaDepartamentos.get(departamento);
@@ -59,7 +72,6 @@ public class ControladorHospital {
 	            System.out.println("Ingrese un idCama válido");
 	        }
 	    } else {
-	    	
 	        System.out.println("Ingrese un departamento válido");
 	    }
 	     

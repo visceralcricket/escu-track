@@ -5,7 +5,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
 
-public class Main {
+public class Hospital {
 
 	
 	public static void main(String[] args) throws IOException {
@@ -19,6 +19,7 @@ public class Main {
 		
 		System.out.println("==========================================");
 		System.out.printf("| -- INICIO DE SISTEMA - ESCUTRACK %s -- |\n", currentVersion);
+		System.out.printf("------------------------------------------");
 		
 		/*
 		 * while(sistemaActivo) {
