@@ -6,15 +6,7 @@ import java.time.LocalDateTime;
   
  
 
-/* +++
- * Este código de aquí contiene la entidad Paciente, su constructor y distintas funcionalidades
- * de getter y setter a cada uno de sus parámetros. Esto se relaciona después con el archivo de
- * ControladorHospital para mantener los parámetros de Paciente privados y seguros dentro de
- * este archivo.
- * @author Felipe T.S
- * 
- * 
- --- */
+
 
 public class Paciente {
 	
