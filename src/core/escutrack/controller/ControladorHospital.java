@@ -183,6 +183,17 @@ public class ControladorHospital {
 		}
 	}
 	
+	public void insertarCama(String cama)
+	{
+		if(!this.mapaDepartamentos.containsKey(cama))
+		{
+			this.mapaDepartamentos.put(cama, new HashMap<>());
+		}
+		else
+		{
+			System.out.println("El departamento ya existe");
+		}
+	}
 	
 	
 	/*
