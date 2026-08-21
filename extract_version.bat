@@ -11,6 +11,6 @@ if not exist "%README_PATH%" (
     exit /b
 )
 
-powershell -Command "$content = Get-Content '%README_PATH%' -Raw; if ($content -match '##\s+\[([0-9]+\.[0-9]+\.[0-9]+)\]') { $Matches[1] | Out-File -FilePath '%OUTPUT_PATH%' -Encoding ascii }"
+powershell -Command "$content = Get-Content '%README_PATH%' -Raw; if ($content -match 'badge/version-([0-9]+\.[0-9]+\.[0-9]+)-') { $Matches[1] | Out-File -FilePath '%OUTPUT_PATH%' -Encoding ascii }"
 
 for /f "tokens=*" %%g in (%OUTPUT_PATH%) do echo %%g> "%OUTPUT_PATH%"
