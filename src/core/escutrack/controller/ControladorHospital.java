@@ -26,7 +26,23 @@ public class ControladorHospital {
 	
 	public ControladorHospital() {
 		this.mapaDepartamentos = new HashMap<>();
-		// inicializarDatos();
+		inicializarDatos();
+	}
+	
+	private void inicializarDatos() {
+		Map<String, Cama> camasUci = new HashMap<>();
+		
+		Cama cama1 = new Cama("A-01", 1);
+		Cama cama2 = new Cama("A-02", 2);
+		
+		camasUci.put(cama1.getIdCama(), cama1);
+		camasUci.put(cama2.getIdCama(), cama2);
+		
+		this.mapaDepartamentos.put("UCI", camasUci);
+		/* +++
+		 * Aquí debería ir registrado uno / algunos pacientes para cumplir
+		 * el SIA de datos de prueba incluidos.
+		 --- */
 	}
 	
 	public void registrarPaciente(String rut, String nombre, String gradoGravedad, String departamento, String idCama, LocalDateTime fechaIngreso)
@@ -70,6 +86,11 @@ public class ControladorHospital {
 	 * TODO: Remover TODAS las operaciones de I/O de texto como System.out.println y 
 	 * delegar todas esas responsabilidades de UX (experiencia de usuario) a Hospital.java
 	 * o a algún otro archivo externo nuevo de renderizado.
+	 * 
+	 * @note Una manera de arreglar esto es utilizando throw new IllegalArgumentException
+	 * en cada error detectado: esto detendrá la ejecución del método de inmediato y luego
+	 * finalizaríamos con try-catch en el archivo Main. esto detectará el error arrojado
+	 * por el método y ya desde la función main podremos gestionar y trabajar el error. 
 	 * 
 	 *  @author Felipe T.S
 	 --- */
