@@ -35,12 +35,6 @@ public class Paciente {
 	 * Aquí hacemos uso de una tabla hash incluida en la librería de util.Map de Java
 	 * para poder asignar los niveles de gravedad con la menor complejidad temporal
 	 * posible haciendo uso de sus etiquetas cualitativas como keys.
-	 *
-	 * Como punto extra, considerar añadir una variable de tipo date para almacenar
-	 * la fecha y ahora a la que el paciente ingresó al establecimiento, cuándo se
-	 * dió de alta y cuándo quedó disponible la cama que se le fue asignada.
-	 * 
-	 * 
 	 --- */
 	
 	private static final Map<String, Integer> ESTADO_CLINICO;
@@ -71,12 +65,9 @@ public class Paciente {
 	    return "Nombre: " + nombre + "\n" +
 	           "Estado: " + nivelGravedad + "\n" +
 	           "RUT: " + rut + "\n" +
-	           "Cama asignada: " + idCamaAsignada +
+	           "Cama asignada: " + idCamaAsignada + "\n" +
 	           "Fecha de ingreso" + fechaIngreso + "\n" + 
 	           "Fecha de egreso" + fechaEgreso;
-	           
-	           
-	           
 	}
 	
 	
