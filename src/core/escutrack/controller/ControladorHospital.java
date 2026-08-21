@@ -1,7 +1,7 @@
 package core.escutrack.controller;
 
 import core.escutrack.model.Paciente;
-
+import core.escutrack.model.Cama;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,29 +22,44 @@ import java.util.Map;
 
 public class ControladorHospital {
 	
-	private Map<String, Map<String, Paciente>> mapaDepartamentos;
+	private Map<String, Map<String, Cama>> mapaDepartamentos;
 	
 	public ControladorHospital() {
 		this.mapaDepartamentos = new HashMap<>();
 		// inicializarDatos();
 	}
 	
-	// Considerar sobrecarga de métodos aquí con un registrarPaciente sin parámetros.
-	
-	public void registrarPaciente(String rut, String nombre, String gradoGravedad, String departamento, String idCama, LocalDateTime fechaIngreso) 
-	{ 
+	public void registrarPaciente(String rut, String nombre, String gradoGravedad, String departamento, String idCama, LocalDateTime fechaIngreso)
+	{
+		Map<String, Cama> camasDelDepartamento = this.mapaDepartamentos.get(departamento);
+
+		if (camasDelDepartamento == null) {
+			System.out.println("Ingrese un departamento válido");
+			return;
+		}
+
+		Cama cama = camasDelDepartamento.get(idCama);
+
+		if (cama == null) {
+			System.out.println("Ingrese un idCama válido");
+			return;
+		}
+
+		if (!cama.isDisponible()) {
+			System.out.println("La cama ya está ocupada");
+			return;
+		}
+
 		Paciente nuevoPaciente = new Paciente(rut, nombre, gradoGravedad, fechaIngreso);
 		nuevoPaciente.setIdCamaAsignada(idCama);
-		
-		// Si el departamento no existe, lo creamos
-		if(!this.mapaDepartamentos.containsKey(departamento)) {
-			this.mapaDepartamentos.put(departamento, new HashMap<>()); 
-		}
-		
-		// Insertamos el nuevo paciente en el mapa interno correspondiente al departamento
-		this.mapaDepartamentos.get(departamento).put(idCama, nuevoPaciente);
+
+		cama.setPaciente(nuevoPaciente); // ya deja disponible = false internamente
 	}
 	
+	public void registrarPaciente(String rut, String nombre, String gradoGravedad, String departamento, String idCama) { // SIA 5
+	    registrarPaciente(rut, nombre, gradoGravedad, departamento, idCama, LocalDateTime.now());
+	}
+
 	/* +++
 	 * FIXME: Toda esta sección de código hacia abajo viola el patrón de MVC
 	 * > modelo, vista, controlador.
@@ -58,45 +73,58 @@ public class ControladorHospital {
 	 * 
 	 *  @author Felipe T.S
 	 --- */
-	
-	public void eliminarPaciente(String idCama, String departamento) {  
-	    Map<String, Paciente> pacientesDelDepartamento = this.mapaDepartamentos.get(departamento);
-	    
-	    if (pacientesDelDepartamento != null) {
-	    	
-	        if (pacientesDelDepartamento.get(idCama) != null) {
-	        	
-	            pacientesDelDepartamento.remove(idCama);
-	            
-	        } else {
-	            System.out.println("Ingrese un idCama válido");
-	        }
-	    } else {
-	        System.out.println("Ingrese un departamento válido");
-	    }
-	     
+
+	public void eliminarPaciente(String idCama, String departamento) {
+		Map<String, Cama> camasDelDepartamento = this.mapaDepartamentos.get(departamento);
+
+		if (camasDelDepartamento == null) {
+			System.out.println("Ingrese un departamento válido");
+			return;
+		}
+
+		Cama cama = camasDelDepartamento.get(idCama);
+
+		if (cama == null) {
+			System.out.println("Ingrese un idCama válido");
+			return;
+		}
+
+		cama.setPaciente(); // versión sin argumentos: limpia paciente y marca disponible = true
+	}
+
+
+	public void mostrarPaciente(String idCama, String departamento) {
+		Map<String, Cama> camasDelDepartamento = this.mapaDepartamentos.get(departamento);
+
+		if (camasDelDepartamento == null) {
+			System.out.println("Ingrese un departamento válido");
+			return;
+		}
+
+		Cama cama = camasDelDepartamento.get(idCama);
+
+		if (cama == null) {
+			System.out.println("Ingrese un idCama válido");
+			return;
+		}
+
+		Paciente paciente = cama.getPaciente();
+
+		if (paciente != null) {
+			System.out.println(paciente);
+		} else {
+			System.out.println("Esa cama no tiene un paciente asignado");
+		}
 	}
 	
-	 public void mostrarPaciente(String idCama, String departamento) 
-	 {
-		 Map<String, Paciente> pacientesDelDepartamento  = this.mapaDepartamentos.get(departamento);
-		 if (pacientesDelDepartamento  != null) {
-		    	Paciente paciente = pacientesDelDepartamento.get(idCama);
-		        if (paciente != null) {
-		        	System.out.println(paciente);
-		        	
-		        } else {
-		            System.out.println("Ingrese un idCama válido");
-		        }
-		    } else {
-		    	
-		        System.out.println("Ingrese un departamento válido");
-		    }
-	 	}
-	 
-	 // METODO PARA MOSTRAR TODOS LOS PACIENTES DE UNA CAMA
-	 //...
+	public void mostrarPaciente(String departamento) {
+	    Map<String, Cama> camasDelDepartamento = this.mapaDepartamentos.get(departamento);
 
-	 }
-	 
-	
+	    if (camasDelDepartamento == null) {
+            System.out.println("Ingrese un departamento válido");
+            return;
+        }
+        
+        // ingresar resto del código aquí..
+	}
+}

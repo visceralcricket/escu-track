@@ -1,20 +1,14 @@
 package core.escutrack.model;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 import java.time.LocalDateTime;
   
  
 
-/* +++
- * Este código de aquí contiene la entidad Paciente, su constructor y distintas funcionalidades
- * de getter y setter a cada uno de sus parámetros. Esto se relaciona después con el archivo de
- * ControladorHospital para mantener los parámetros de Paciente privados y seguros dentro de
- * este archivo.
- * @author Felipe T.S
- * 
- * 
- --- */
+
 
 public class Paciente {
 	
@@ -42,7 +36,19 @@ public class Paciente {
 	 * para poder asignar los niveles de gravedad con la menor complejidad temporal
 	 * posible haciendo uso de sus etiquetas cualitativas como keys.
 	 --- */
-	private static final Map<String, Integer> ESTADO_CLINICO = Map.of("indefinido",0, "estable",1, "moderado",2, "urgente",3, "severo",4, "critico",5);
+	
+	private static final Map<String, Integer> ESTADO_CLINICO;
+	
+	static {
+		Map<String, Integer> map = new HashMap<>();
+		map.put("indefinido",0);
+		map.put("estable",1);
+		map.put("moderado",2);
+		map.put("urgente",3);
+		map.put("severo",4);
+		map.put("critico",5);
+		ESTADO_CLINICO = Collections.unmodifiableMap(map);
+	}
 	
 	private static int parseGradoGravedad(String gradoGravedad) {
 		if(gradoGravedad == null) return 0;

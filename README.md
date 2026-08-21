@@ -34,6 +34,15 @@
 
     * <code><b><span style="color: #009dff;">model/</span></b></code>
         * <code><b><span style="color: #f43009da;">Paciente.java</span></b></code>: 
+        
+## **SIAS implementados**
++ SIA 1
++ SIA 3
++ SIA 4
++ SIA 5
++ SIA 6
++ <span style="color:red">SIA 7 EN PROGRESO</span>
++ <span style="color:red">SIA 8 EN PROGRESO</span>
 
 ## **Funcionalidades pendientes** 
 ```diff
@@ -58,6 +67,11 @@
 <small>*Nota: Este changelog utiliza fechas en ISO estándar: YY-MM-DD.*</small>
 
 ## [0.1.2] - 2026-08-18
+> Implementacion de la nueva entidad Cama
+### Añadido
++ Cambio en el funcionamiento de la clase  ControladorHospital para utilizar la nueva entidad
++ Culmino de requisitos minimos para SIA 5 y SIA 6
+
 > Cambios y mejoras generales realizadas
 
 ### Cambios
@@ -71,18 +85,12 @@
 ## [0.1.1] - 2026-08-16
 > Añadida automatización de número de versión en el ciclo principal del programa
 ### Añadido
-
-  + Script `extract_version.bat` creado para transmitir el número de versión actual del sistema al ciclo principal del mismo en `Main.java`
-
-  + Front-end básico en `Main.java`.
-
-  + Añadido paquete `src/ core.escutrack.resources` que contiene el archivo `version.txt` donde se almacena el número de versión del programa *EscuTrack*.
-
-  + Metodos para eliminar y mostrar paciente.
-
-  + Parametros para fecha de ingreso y egreso para cada paciente.
-
-  + Creacion de la clase cama.
++ Script `extract_version.bat` creado para transmitir el número de versión actual del sistema al ciclo principal del mismo en `Main.java`
++ Front-end básico en `Main.java`.
++ Añadido paquete `src/ core.escutrack.resources` que contiene el archivo `version.txt` donde se almacena el número de versión del programa *EscuTrack*.
++ Metodos para eliminar y mostrar paciente.
++ Parametros para fecha de ingreso y egreso para cada paciente.
++ Creacion de la clase cama.
 
 ## [0.1.0] - 2026-08-16
 > Implementadas entidades principales y funcionalidades clave.
