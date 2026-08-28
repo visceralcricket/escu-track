@@ -22,6 +22,7 @@ public class Main {
 			System.out.println("\n--- MENÚ PRINCIPAL ---");
 			System.out.println("1. Registrar nuevo Paciente");
 			System.out.println("2. Mostrar Paciente específico");
+			// System.out.println("3. Modificar Paciente particular");
 			System.out.println("3. Salir");
 			System.out.print("Seleccione una opción: ");
 			
@@ -47,10 +48,15 @@ public class Main {
 					System.out.print("ID Cama (ej. C-01): ");
 					String cama = lector.readLine();
 					
-					// invocar la sobrecarga sin fecha (SIA-5)
-					controlador.registrarPaciente(rut, nombre, gravedad, depto, cama);
-					System.out.println("-> Paciente registrado exitosamente.");
+					try {
+						// invocar la sobrecarga sin fecha (SIA-5)
+						controlador.registrarPaciente(rut, nombre, gravedad, depto, cama);
+						System.out.println("-> Paciente registrado exitosamente.");
+					}
 					
+					catch (Exception e) {
+						System.out.println("\n[ERROR DE REGISTRO]: " + e.getMessage());
+					}
 					break;
 					
 				case "2":
