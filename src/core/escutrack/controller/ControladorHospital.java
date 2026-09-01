@@ -1,7 +1,12 @@
 package core.escutrack.controller;
 
+// Entidades
 import core.escutrack.model.Paciente;
 import core.escutrack.model.Cama;
+// Custom exceptions
+import core.escutrack.exceptions.CamaOcupadaException;
+import core.escutrack.exceptions.EntidadNoEncontradaException;
+// Utilidades
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,26 +46,16 @@ public class ControladorHospital {
 		this.mapaDepartamentos.put("UCI", camasUci);
 	}
 	
-	public void registrarPaciente(String rut, String nombre, String gradoGravedad, String departamento, String idCama, LocalDateTime fechaIngreso)
+	public void registrarPaciente(String rut, String nombre, String gradoGravedad, String departamento, String idCama, LocalDateTime fechaIngreso) throws EntidadNoEncontradaException, CamaOcupadaException
 	{
 		Map<String, Cama> camasDelDepartamento = this.mapaDepartamentos.get(departamento);
-
-		if (camasDelDepartamento == null) {
-			System.out.println("Ingrese un departamento válido");
-			return;
-		}
+		if (camasDelDepartamento == null) throw new EntidadNoEncontradaException("Departamento inexistente.");
 
 		Cama cama = camasDelDepartamento.get(idCama);
+		if (cama == null) throw new EntidadNoEncontradaException("ID de cama no válido.");
 
-		if (cama == null) {
-			System.out.println("Ingrese un idCama válido");
-			return;
-		}
-
-		if (!cama.isDisponible()) {
-			System.out.println("La cama ya está ocupada");
-			return;
-		}
+		if (!cama.isDisponible()) throw new CamaOcupadaException("La cama '" + idCama + "' ya está ocupada.");
+		
 
 		Paciente nuevoPaciente = new Paciente(rut, nombre, gradoGravedad, fechaIngreso);
 		nuevoPaciente.setIdCamaAsignada(idCama);
@@ -68,18 +63,18 @@ public class ControladorHospital {
 		cama.setPaciente(nuevoPaciente); // ya deja disponible = false internamente
 	}
 	
-	public void registrarPaciente(String rut, String nombre, String gradoGravedad, String departamento, String idCama) { // SIA 5
+	public void registrarPaciente(String rut, String nombre, String gradoGravedad, String departamento, String idCama) throws EntidadNoEncontradaException, CamaOcupadaException { // SIA 5
 	    registrarPaciente(rut, nombre, gradoGravedad, departamento, idCama, LocalDateTime.now());
 	}
 		
-	public void eliminarPaciente(String idCama, String departamento) {
+	public void eliminarPaciente(String idCama, String departamento) throws EntidadNoEncontradaException, CamaOcupadaException {
 		Map<String, Cama> camasDelDepartamento = this.mapaDepartamentos.get(departamento);
-		// Notificar y delegar responsabilidad del error al front-end
-		if(camasDelDepartamento == null) throw new IllegalArgumentException("Departamento inexistente.");
+		if(camasDelDepartamento == null) throw new EntidadNoEncontradaException("Departamento inexistente.");
 		
 		Cama cama = camasDelDepartamento.get(idCama);
-		if(cama == null) throw new IllegalArgumentException("ID de Cama no válido.");
-		if(cama.isDisponible()) throw new IllegalStateException("La cama ya está vacía.");
+		if(cama == null) throw new EntidadNoEncontradaException("ID de Cama no válido.");
+		// No se puede eliminar paciente de cama que está vacía
+		if(cama.isDisponible()) throw new EntidadNoEncontradaException("La cama ya está vacía.");
 
 		cama.setPaciente(); // versión sin argumentos: limpia paciente y marca disponible = true
 	}
@@ -91,22 +86,22 @@ public class ControladorHospital {
 	 * @author Felipe T.S.
 	 --- */
 
-	public String mostrarPaciente(String idCama, String departamento) {
+	public String mostrarPaciente(String idCama, String departamento) throws EntidadNoEncontradaException, CamaOcupadaException {
 		Map<String, Cama> camasDelDepartamento = this.mapaDepartamentos.get(departamento);
-		if(camasDelDepartamento == null) throw new IllegalArgumentException("Departamento inexistente.");
+		if(camasDelDepartamento == null) throw new EntidadNoEncontradaException("Departamento inexistente.");
 		
 		Cama cama = camasDelDepartamento.get(idCama);
-		if(cama == null) throw new IllegalArgumentException("ID de Cama no válido.");
+		if(cama == null) throw new EntidadNoEncontradaException("ID de Cama no válido.");
 	
 		Paciente paciente = cama.getPaciente();
-		if(paciente == null) throw new IllegalStateException("Cama sin paciente asignado.");
+		if(paciente == null) throw new EntidadNoEncontradaException("Cama sin paciente asignado.");
 		
 		return paciente.toString(); // Retornar String
 	}
 	
-	public void modificarGravedadPaciente(String idCama, String departamento, String nuevaGravedad) {
+	public void modificarGravedadPaciente(String idCama, String departamento, String nuevaGravedad) throws EntidadNoEncontradaException, CamaOcupadaException {
 		Map<String, Cama> camasDelDepartamento = this.mapaDepartamentos.get(departamento);
-		if(camasDelDepartamento == null) throw new IllegalArgumentException("Departamento inexistente.");
+		if(camasDelDepartamento == null) throw new EntidadNoEncontradaException("Departamento inexistente.");
 		
 		Cama cama = camasDelDepartamento.get(idCama);
 		if(cama == null) throw new IllegalArgumentException("ID de Cama no válido.");
@@ -114,5 +109,17 @@ public class ControladorHospital {
 		
 		cama.getPaciente().setNivelGravedad(nuevaGravedad);
 	}
+	
+	/* +++
+	 * TODO: SIA-9, Funcionalidad para el Negocio por medio de filtrado
+	 * 
+	 * public String filtrarPorGravedad(String gravedad)
+	 * 
+	 * La idea con este método es cumplir:
+	 * - SIA-9 Implementar al menos 1 funcionalidad propia de utilidad
+	 * para el negocio considerando subconjunto filtrado por criterio.
+	 * 
+	 * @author Felipe T.S.
+	 */
 	
 }
