@@ -6,90 +6,143 @@ import java.io.InputStreamReader;
 import java.io.IOException;
 // Necesario para abrir programa en ventanas
 import javax.swing.JOptionPane;
+// Importaciones para mejorar visuales del modo ventana
+import javax.swing.UIManager;
+import java.awt.Font;
+
+/* +++
+ * 		$ NOTAS DE MANTENIMIENTO $
+ * 
+ * ============ QUÉ FALTA? ============
+ * 
+ * SIA-8 y SIA-9: expandir switch e incluir funcionalidades de
+ * Modificar, Eliminar y Filtrar por gravedad (SIA-9, funcionalidad
+ * de negocio) entidad Paciente.
+ * 
+ * SIA-11: Persistencia de datos utilizando archivo de texto, CSV,
+ * Excel, o conexión con DBMS local (ej. MySQL), utilizando sistema
+ * batch (carga datos al iniciar la aplicación y graba al salir) 
+ *
+ *
+ * @ author Felipe T.S.
+ --- */
 
 public class Main {
-
-	// Alternador del modo ventana del programa 
-	public static boolean usarVentanas = true;
+	
+	private enum EscutrackMode {
+		WINDOW_MODE,
+		CONSOLE_MODE
+	}
+	// Instanciar modo de visualización por defecto a consola (o ventana)
+	public static EscutrackMode currentMode = EscutrackMode.CONSOLE_MODE;
 	
 	public static void main(String[] args) throws IOException {
 		
 		BufferedReader lector = new BufferedReader(new InputStreamReader(System.in));
+		// Estilizadores para modo ventana
+		UIManager.put("OptionPane.messageFont", new Font("Consolas", Font.PLAIN, 16));
+		UIManager.put("OptionPane.buttonFont", new Font("Consolas", Font.BOLD, 14));
+		UIManager.put("TextField.font", new Font("Consolas", Font.PLAIN, 16));
+		
 		String currentVersion = VersionLoader.getVersion();
 		ControladorHospital controlador = new ControladorHospital();
+		String opcion = "";
 		
 		boolean sistemaActivo = true;
 		
-		System.out.println("==========================================");
-		System.out.printf("| -- INICIO DE SISTEMA - ESCUTRACK %s -- |\n", currentVersion);
-		System.out.printf("------------------------------------------");
+		System.out.println("¿Qué modo de visualización desea ejecutar el programa?\n1) Modo Consola\n2) Modo Ventana");
+		
+		while(true) {
+			opcion = solicitarEntrada("Ingrese 1 o 2:", lector);
+			if(opcion.equals("1")) {
+				currentMode = EscutrackMode.CONSOLE_MODE;
+				break;
+			}
+			if(opcion.equals("2")) {
+				currentMode = EscutrackMode.WINDOW_MODE;
+				break;
+			}
+			System.out.println("Opción no válida. Intente de nuevo.");
+		}
+		
+		String mensajeIntroduccion = "\n\n\t| -- INICIO DE SISTEMA - ESCUTRACK " +
+		currentVersion +" -- |\n";
+		
+		mostrarSalida(mensajeIntroduccion);
 		
 		while(sistemaActivo) {
-			System.out.println("\n--- MENÚ PRINCIPAL ---");
-			System.out.println("1. Registrar nuevo Paciente");
-			System.out.println("2. Mostrar Paciente específico");
-			// System.out.println("3. Modificar Paciente particular");
-			System.out.println("3. Salir");
+			String mainMenu = "\t$ -- MENÚ PRINCIPAL -- $\n" +
+			"\t1. Registrar nuevo Paciente\n" +
+			"\t2. Mostrar Paciente específico/a\n" +
+			"\t3. Salir\n\n" +
+			"Seleccione una opción:";
 			
-			String opcion = solicitarEntrada("Seleccione una opción: ", lector);
+			opcion = solicitarEntrada(mainMenu, lector);
+			// Si cancela el menú, sale del programa
+			if(opcion == null) opcion = "3";
 			
 			switch(opcion) {
 				case "1":
-					// Por seguridad de mantener el buffer limpio, utilizaremos System.out.print
-					System.out.println("\n| -- REGISTRO DE PACIENTE -- |");
-					
-					String rut = solicitarEntrada("RUT: ", lector);
-					
-					String nombre = solicitarEntrada("Nombre: ", lector);
-					
-					String gravedad = solicitarEntrada("Gravedad (estable, moderado, urgente, severo, critico): ", lector);
-					
-					String depto = solicitarEntrada("Departamento (ej. UCI): ", lector);
-					
-					String cama = solicitarEntrada("ID Cama (ej. C-01): ", lector);
-					
-					try {
-						// invocar la sobrecarga sin fecha (SIA-5)
-						controlador.registrarPaciente(rut, nombre, gravedad, depto, cama);
-						System.out.println("-> Paciente registrado exitosamente.");
-					}
-					
-					catch (Exception e) {
-						System.out.println("\n[ERROR DE REGISTRO]: " + e.getMessage());
-					}
-					break;
+				    mostrarSalida("\n\t| -- REGISTRO DE PACIENTE -- |");
+				    try {
+				        String rut = solicitarEntrada("\tRUT: ", lector);
+				        verificarCampo(rut);
+				        
+				        String nombre = solicitarEntrada("\tNombre: ", lector);
+				        verificarCampo(nombre);
+				        
+				        String gravedad = solicitarEntrada("\tGravedad: ", lector);
+				        verificarCampo(gravedad);
+				        
+				        String depto = solicitarEntrada("\tDepartamento: ", lector);
+				        verificarCampo(depto);
+				        
+				        String cama = solicitarEntrada("\tID Cama: ", lector);
+				        verificarCampo(cama);
+				        
+				        controlador.registrarPaciente(rut, nombre, gravedad, depto, cama);
+				        mostrarSalida("\t-> Paciente registrado exitosamente.");
+				        
+				    }
+				    catch (Exception e) {
+				        mostrarSalida("\n\t[ERROR DE REGISTRO]: " + e.getMessage());
+				    }
+				    break;
 					
 				case "2":
-					mostrarSalida("\n--- BÚSQUEDA DE PACIENTE ---");
+					mostrarSalida("\n\t--- BÚSQUEDA DE PACIENTE ---");
 					try { 
-						String deptoBusqueda = solicitarEntrada("Departamento: ", lector);
-						String camaBusqueda = solicitarEntrada("ID Cama: ", lector);
+						String deptoBusqueda = solicitarEntrada("\tDepartamento: ", lector);
+						verificarCampo(deptoBusqueda);
+						
+						String camaBusqueda = solicitarEntrada("\tID Cama: ", lector);
+						verificarCampo(camaBusqueda);
+						
 						String datosPaciente = controlador.mostrarPaciente(camaBusqueda, deptoBusqueda);
 						
-						mostrarSalida("Datos del Paciente:\n" + datosPaciente);
+						mostrarSalida("\tDatos del Paciente:\n" + datosPaciente);
 					}
 					catch(Exception e) {
 						// SIA-12: Captura polimórfica con custom exceptions
-						mostrarSalida("[ERROR DE BÚSQUEDA]: " + e.getMessage());
+						mostrarSalida("\n\t[ERROR DE BÚSQUEDA]: " + e.getMessage());
 					}
 					break;
 					
 				case "3":
-					System.out.println("Cerrando sistema EscuTrack...");
+					mostrarSalida("Cerrando sistema EscuTrack...");
 					sistemaActivo = false;
 					
 					break;
 					
 				default:
-					System.out.println("Opción no válida. Intente nuevamente.");
+					mostrarSalida("\tOpción no válida. Intente nuevamente.");
 					break;
 			}
 		}	
 	}
 	
 	private static String solicitarEntrada(String msg, BufferedReader lector) throws IOException {
-		if(msg == null) return "";
-		if(usarVentanas) {
+		if(currentMode == EscutrackMode.WINDOW_MODE) {
 			return JOptionPane.showInputDialog(null, msg, "EscuTrack", JOptionPane.QUESTION_MESSAGE);
 		}
 		else {
@@ -99,9 +152,15 @@ public class Main {
 	}
 	
 	private static void mostrarSalida(String msg) {
-		if(usarVentanas) {
+		if(currentMode == EscutrackMode.WINDOW_MODE) {
 			JOptionPane.showMessageDialog(null, msg, "EscuTrack", JOptionPane.INFORMATION_MESSAGE);
 		}
 		else System.out.println(msg);
 	}
+	
+	private static void verificarCampo(String msg) throws IllegalArgumentException {
+		if(msg == null || msg.trim().isEmpty()) {
+			throw new IllegalArgumentException("Operación abortada: campo vacío no permitido.");
+		}
+	}	
 }

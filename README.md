@@ -1,7 +1,7 @@
 # **EscuTrack**
 > *Programa de gestión hospitalaria.*
 
-<img src="https://img.shields.io/badge/version-0.1.2-blue" alt="version">
+<img src="https://img.shields.io/badge/version-0.1.3-blue" alt="version">
 
 [![Last Commit](https://img.shields.io/github/last-commit/visceralcricket/escu-track/main)](https://github.com/visceralcricket/infinity-escu-track/commits/main)
 
@@ -44,9 +44,9 @@
 + SIA-5: Sobrecarga de métodos (Cama.setPaciente, Controlador.registrarPaciente).
 + SIA-6: Sobreescritura de métodos (toString en Cama y Paciente).
 + SIA-7: Menú con Inserción y Mostrar.
-+ SIA-8: Menú con Edición, Eliminación y Búsqueda.
+- SIA-8 [PENDIENTE]: Menú con Edición, Eliminación y Búsqueda de entidad Paciente desarrolladas pero NO implementadas en el flujo principal del sistema.
 - SIA-9 [PENDIENTE]: Funcionalidad de negocio propia (filtrado de pacientes por gravedad).
-@@SIA-10 [A MEDIAS]: Las funcionalidades soportan consola y ventanas mediante wrappers, pero falta implementar el menú inicial que pregunte al usuario qué modo desea utilizar (actualmente el toggle es manual en el código fuente).@@
++ SIA-10: Modos de Consola y Ventana funcionando correctamente.
 - SIA-11 [NO IMPLEMENTADO]: Implementar persistencia de datos batch. Guardar el estado del hospital en un archivo .csv al salir y cargarlo al iniciar.
 + SIA-12: Implementación de 2 excepciones personalizadas con try-catch (CamaOcupadaException, EntidadNoEncontradaException). 
 ```
@@ -66,14 +66,39 @@
 > @@[Nada aún]@@
 
 @@ A nivel de lógica de procedimientos / sistemas @@
-- [BUG]: El programa arroja una excepción NullPointerException y se cuelga a la hora de, en el Modo Ventana, cerrar la ventana de diálogo forzosamente (clickear "cancel") o presionando ESC.
++ [BUG ARREGLADO]: El programa arroja una excepción NullPointerException y se cuelga a la hora de, en el Modo Ventana, cerrar la ventana de diálogo forzosamente (clickear "cancel") o presionando ESC.
 ```
 # **Changelog - EscuTrack**
 <small>*Nota: Este changelog utiliza fechas en ISO estándar: YY-MM-DD.*</small>
 
+## [0.1.3] - 2026-09-02
+> Consolidación de front-end, interfaz dual y manejo seguro de excepciones.
+
+### Añadido
+
++ Estructura `enum EscutrackMode` para controlar dinámicamente el estado visual del programa (Modo Consola y Ventana)
+
++ Wrappers de I/O en `Main.java` mediante `JOptionPane` y `BufferedReader` para permitir ejecución híbrida del sistema (SIA-10).
+
++ Excepciones personalizadas (`CamaOcupadaException` y `EntidadNoEncontradaException`) añadidas al módulo de utilidades para aislar errores lógicos (SIA-12).
+
++ Función modular `verificarCampo` de validación para evitar procesamiento de cadenas vacías o nulas introducidas por el usuario sin romper el flujo lógico del programa.
+
+### Cambios
+
++ Refactorización de `ConotroladorHospital.java`: se eliminaron las dependencias de impresión directa en consola para respetar estrictamente el patrón **MVC**, delegando el renderizado al front-end.
+
++ Estilización de la interfaz de Ventanas mediante `UIManager`, reemplazando la fuente por defecto por "Consolas" para mayor legibilidad.
+
++ Resolución del bug crítico `NullPointerException` provocado al cancelar forzosamente los cuadros de diálogo en el Modo Ventana.
+
++ El bucle principal ahora evalúa y maneja correctamente entradas vacías (`""`) enviadas accidentalmente mediante la tecla Enter en la consola.
+
 ## [0.1.2] - 2026-08-18
 > Implementacion de la nueva entidad Cama
+
 ### Añadido
+
 + Cambio en el funcionamiento de la clase  ControladorHospital para utilizar la nueva entidad
 + Culmino de requisitos minimos para SIA 5 y SIA 6
 
