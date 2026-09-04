@@ -71,6 +71,13 @@
 # **Changelog - EscuTrack**
 <small>*Nota: Este changelog utiliza fechas en ISO estándar: YY-MM-DD.*</small>
 
+## [0.1.4] - 2026-09-02
+> Creación de funcionalidad filtrarPorGravedad
+
+### Añadido
+
++ Función temprana creada de filtrarPorGravedad que se encarga de mostrar un listado de los pacientes que tengan un nivel de gravedad especificado junto con los datos del paciente y el departamento al que pertenece.
+
 ## [0.1.3] - 2026-09-02
 > Consolidación de front-end, interfaz dual y manejo seguro de excepciones.
 
@@ -109,8 +116,6 @@
   + Archivo principal del programa renombrado a `Main.java` para que este mismo sea más descriptivo.
 
   + Añadida documentación de carácter organizativo a distintos archivos para agilizar el desarrollo de los mismos.
-
-  + 
 
 ## [0.1.1] - 2026-08-16
 > Añadida automatización de número de versión en el ciclo principal del programa

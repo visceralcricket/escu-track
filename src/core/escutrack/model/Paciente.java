@@ -60,6 +60,16 @@ public class Paciente {
 		return nivelGravedad;
 	}
 	
+	public boolean coincideGravedad(String gravedadBuscada) {
+	    try {
+	        // Usa su propio método privado internamente
+	        return this.nivelGravedad == parseGradoGravedad(gravedadBuscada);
+	    } catch (IllegalArgumentException e) {
+	        // Si el usuario busca un término inválido (ej. "hola"), simplemente no coincide
+	        return false;
+	    }
+	}
+	
 	@Override
 	public String toString() { //SIA 6	
 	    return "Nombre: " + nombre + "\n" +

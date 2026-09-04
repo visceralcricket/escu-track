@@ -9,6 +9,8 @@ import core.escutrack.exceptions.EntidadNoEncontradaException;
 // Utilidades
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /* +++
@@ -44,6 +46,10 @@ public class ControladorHospital {
 		camasUci.put(cama2.getIdCama(), cama2);
 		
 		this.mapaDepartamentos.put("UCI", camasUci);
+	}
+	
+	public Map<String, Map<String, Cama>> getMapaDepartamentos() {
+		return this.mapaDepartamentos;
 	}
 	
 	public void registrarPaciente(String rut, String nombre, String gradoGravedad, String departamento, String idCama, LocalDateTime fechaIngreso) throws EntidadNoEncontradaException, CamaOcupadaException
@@ -108,6 +114,35 @@ public class ControladorHospital {
 		if(cama.isDisponible()) throw new IllegalStateException("La cama está vacía, no hay paciente que modificar.");
 		
 		cama.getPaciente().setNivelGravedad(nuevaGravedad);
+	}
+	
+	public String filtrarPorGravedad(String gravedad) throws EntidadNoEncontradaException {
+		StringBuilder cadena = new StringBuilder();
+		List<String> nombresDptos = new ArrayList<>(mapaDepartamentos.keySet());
+		
+		for (int i = 0; i < nombresDptos.size(); i++) {
+			String nombreDpto = nombresDptos.get(i);
+			Map<String, Cama> camasDelDepartamento = mapaDepartamentos.get(nombreDpto);
+			if (camasDelDepartamento == null) throw new EntidadNoEncontradaException("Departamento inexistente.");
+			List<String> listaIdCamas = new ArrayList<>(camasDelDepartamento.keySet());
+			
+			for (int j = 0; j < listaIdCamas.size(); j++) {
+				String idCama = listaIdCamas.get(j);
+				Cama cama = camasDelDepartamento.get(idCama);
+				
+				if (cama != null && !cama.isDisponible() && cama.getPaciente() != null) {
+					Paciente paciente = cama.getPaciente();
+					if (paciente.coincideGravedad(gravedad)) {
+						cadena.append("Departamento: ").append(nombreDpto).append("\n");
+						cadena.append(paciente.toString()).append("\n\n");
+					}
+				}
+			}
+		}
+		if (cadena.length() == 0) {
+			return "No se encontraron pacientes con la gravedad: " + gravedad;
+		}
+		return cadena.toString();
 	}
 	
 	/* +++
