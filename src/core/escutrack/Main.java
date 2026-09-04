@@ -1,31 +1,18 @@
 package core.escutrack;
 
 import core.escutrack.controller.ControladorHospital;
+// Validador principal de parámetros
+import core.escutrack.utils.ValidadorCamposUtils;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
+// Constructor de scripts -> necesario para ejecutar archivos batch
+import java.lang.ProcessBuilder;
 // Necesario para abrir programa en ventanas
 import javax.swing.JOptionPane;
 // Importaciones para mejorar visuales del modo ventana
 import javax.swing.UIManager;
 import java.awt.Font;
-
-/* +++
- * 		$ NOTAS DE MANTENIMIENTO $
- * 
- * ============ QUÉ FALTA? ============
- * 
- * SIA-8 y SIA-9: expandir switch e incluir funcionalidades de
- * Modificar, Eliminar y Filtrar por gravedad (SIA-9, funcionalidad
- * de negocio) entidad Paciente.
- * 
- * SIA-11: Persistencia de datos utilizando archivo de texto, CSV,
- * Excel, o conexión con DBMS local (ej. MySQL), utilizando sistema
- * batch (carga datos al iniciar la aplicación y graba al salir) 
- *
- *
- * @ author Felipe T.S.
- --- */
 
 public class Main {
 	
@@ -43,6 +30,25 @@ public class Main {
 		UIManager.put("OptionPane.messageFont", new Font("Consolas", Font.PLAIN, 16));
 		UIManager.put("OptionPane.buttonFont", new Font("Consolas", Font.BOLD, 14));
 		UIManager.put("TextField.font", new Font("Consolas", Font.PLAIN, 16));
+		
+		try {
+			/* +++
+			 *  el parámetro /c ejecuta el script que se le indica a continuación
+			 *  y luego procede a cerrarlo de inmediato. Esto evita que la terminal
+			 *  se mantenga abierta tras haber ya ejecutado el script en sí, lo cual
+			 *  sería innecesario en este contexto.
+			 *  
+			 *  @author Felipe T.S.
+			 --- */
+			ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/c", "extract_version.bat");
+			pb.directory(new java.io.File("."));
+			Process proceso = pb.start();
+			// El programa Java se detiene hasta que el .bat se termine de ejecutar
+			proceso.waitFor();
+		}
+		catch(InterruptedException | IOException e) {
+			System.err.println("[!] Advertencia: No se pudo auto-ejecutar el script de versión.\nPor favor verifique la integridad de los archivos del programa.");
+		}
 		
 		String currentVersion = VersionLoader.getVersion();
 		ControladorHospital controlador = new ControladorHospital();
@@ -86,19 +92,19 @@ public class Main {
 				    mostrarSalida("\n\t| -- REGISTRO DE PACIENTE -- |");
 				    try {
 				        String rut = solicitarEntrada("\tRUT: ", lector);
-				        verificarCampo(rut);
+				        ValidadorCamposUtils.validarRut(rut);
 				        
 				        String nombre = solicitarEntrada("\tNombre: ", lector);
-				        verificarCampo(nombre);
+				        ValidadorCamposUtils.validarNombre(nombre);
 				        
 				        String gravedad = solicitarEntrada("\tGravedad: ", lector);
-				        verificarCampo(gravedad);
+				        ValidadorCamposUtils.validarGravedad(gravedad);
 				        
 				        String depto = solicitarEntrada("\tDepartamento: ", lector);
-				        verificarCampo(depto);
+				        ValidadorCamposUtils.validarDepartamento(depto);
 				        
 				        String cama = solicitarEntrada("\tID Cama: ", lector);
-				        verificarCampo(cama);
+				        ValidadorCamposUtils.validarIdCama(cama);
 				        
 				        controlador.registrarPaciente(rut, nombre, gravedad, depto, cama);
 				        mostrarSalida("\t-> Paciente registrado exitosamente.");
@@ -113,10 +119,10 @@ public class Main {
 					mostrarSalida("\n\t--- BÚSQUEDA DE PACIENTE ---");
 					try { 
 						String deptoBusqueda = solicitarEntrada("\tDepartamento: ", lector);
-						verificarCampo(deptoBusqueda);
+						ValidadorCamposUtils.validarDepartamento(deptoBusqueda);
 						
 						String camaBusqueda = solicitarEntrada("\tID Cama: ", lector);
-						verificarCampo(camaBusqueda);
+						ValidadorCamposUtils.validarIdCama(camaBusqueda);
 						
 						String datosPaciente = controlador.mostrarPaciente(camaBusqueda, deptoBusqueda);
 						
@@ -130,8 +136,14 @@ public class Main {
 					
 				case "3":
 					mostrarSalida("Cerrando sistema EscuTrack...");
+					try {
+						// Ejecutar método en Controlador para guardar CSV 
+						controlador.apagarSistema();
+					}
+					catch (Exception e) {
+						mostrarSalida("\n\t[ERROR CRÍTICO AL GUARDAR BASE DE DATOS]: " + e.getMessage());
+					}
 					sistemaActivo = false;
-					
 					break;
 					
 				default:
@@ -158,9 +170,4 @@ public class Main {
 		else System.out.println(msg);
 	}
 	
-	private static void verificarCampo(String msg) throws IllegalArgumentException {
-		if(msg == null || msg.trim().isEmpty()) {
-			throw new IllegalArgumentException("Operación abortada: campo vacío no permitido.");
-		}
-	}	
 }
