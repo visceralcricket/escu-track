@@ -74,7 +74,8 @@ public class Main {
 			String mainMenu = "\t$ -- MENÚ PRINCIPAL -- $\n" +
 			"\t1. Registrar nuevo Paciente\n" +
 			"\t2. Mostrar Paciente específico/a\n" +
-			"\t3. Salir\n\n" +
+			"\t3. Filtrar Pacientes por gravedad\n" +
+			"\t4. Salir\n\n" +
 			"Seleccione una opción:";
 			
 			opcion = solicitarEntrada(mainMenu, lector);
@@ -127,8 +128,18 @@ public class Main {
 						mostrarSalida("\n\t[ERROR DE BÚSQUEDA]: " + e.getMessage());
 					}
 					break;
+				
+				case "3": 
+					try {
+						String gravedad = solicitarEntrada("\tIngrese gravedad a filtrar: ", lector);
+						String pacienteFiltrado = controlador.filtrarPorGravedad(gravedad);
+						mostrarSalida(pacienteFiltrado);
+					}
+					catch(Exception e) {
+						mostrarSalida("\n\t[ERROR DE FILTRADO]: " + e.getMessage());
+					}
 					
-				case "3":
+				case "4":
 					mostrarSalida("Cerrando sistema EscuTrack...");
 					sistemaActivo = false;
 					

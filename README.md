@@ -45,7 +45,7 @@
 + SIA-6: Sobreescritura de métodos (toString en Cama y Paciente).
 + SIA-7: Menú con Inserción y Mostrar.
 - SIA-8 [PENDIENTE]: Menú con Edición, Eliminación y Búsqueda de entidad Paciente desarrolladas pero NO implementadas en el flujo principal del sistema.
-- SIA-9 [PENDIENTE]: Funcionalidad de negocio propia (filtrado de pacientes por gravedad).
++ SIA-9: Funcionalidad de negocio propia (filtrado de pacientes por gravedad).
 + SIA-10: Modos de Consola y Ventana funcionando correctamente.
 - SIA-11 [NO IMPLEMENTADO]: Implementar persistencia de datos batch. Guardar el estado del hospital en un archivo .csv al salir y cargarlo al iniciar.
 + SIA-12: Implementación de 2 excepciones personalizadas con try-catch (CamaOcupadaException, EntidadNoEncontradaException). 
@@ -77,6 +77,8 @@
 ### Añadido
 
 + Función temprana creada de filtrarPorGravedad que se encarga de mostrar un listado de los pacientes que tengan un nivel de gravedad especificado junto con los datos del paciente y el departamento al que pertenece.
+
++ Implementación de función filtrarPorGravedad a archivo Main.java
 
 ## [0.1.3] - 2026-09-02
 > Consolidación de front-end, interfaz dual y manejo seguro de excepciones.

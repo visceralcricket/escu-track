@@ -142,19 +142,6 @@ public class ControladorHospital {
 		if (cadena.length() == 0) {
 			return "No se encontraron pacientes con la gravedad: " + gravedad;
 		}
-		return cadena.toString();
+		return (cadena.toString());
 	}
-	
-	/* +++
-	 * TODO: SIA-9, Funcionalidad para el Negocio por medio de filtrado
-	 * 
-	 * public String filtrarPorGravedad(String gravedad)
-	 * 
-	 * La idea con este método es cumplir:
-	 * - SIA-9 Implementar al menos 1 funcionalidad propia de utilidad
-	 * para el negocio considerando subconjunto filtrado por criterio.
-	 * 
-	 * @author Felipe T.S.
-	 */
-	
 }
