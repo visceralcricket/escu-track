@@ -1,6 +1,8 @@
 package core.escutrack;
 
 import core.escutrack.controller.ControladorHospital;
+// Validador principal de parámetros
+import core.escutrack.utils.ValidadorCamposUtils;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
@@ -90,19 +92,19 @@ public class Main {
 				    mostrarSalida("\n\t| -- REGISTRO DE PACIENTE -- |");
 				    try {
 				        String rut = solicitarEntrada("\tRUT: ", lector);
-				        verificarCampo(rut);
+				        ValidadorCamposUtils.validarRut(rut);
 				        
 				        String nombre = solicitarEntrada("\tNombre: ", lector);
-				        verificarCampo(nombre);
+				        ValidadorCamposUtils.validarNombre(nombre);
 				        
 				        String gravedad = solicitarEntrada("\tGravedad: ", lector);
-				        verificarCampo(gravedad);
+				        ValidadorCamposUtils.validarGravedad(gravedad);
 				        
 				        String depto = solicitarEntrada("\tDepartamento: ", lector);
-				        verificarCampo(depto);
+				        ValidadorCamposUtils.validarDepartamento(depto);
 				        
 				        String cama = solicitarEntrada("\tID Cama: ", lector);
-				        verificarCampo(cama);
+				        ValidadorCamposUtils.validarIdCama(cama);
 				        
 				        controlador.registrarPaciente(rut, nombre, gravedad, depto, cama);
 				        mostrarSalida("\t-> Paciente registrado exitosamente.");
@@ -117,10 +119,10 @@ public class Main {
 					mostrarSalida("\n\t--- BÚSQUEDA DE PACIENTE ---");
 					try { 
 						String deptoBusqueda = solicitarEntrada("\tDepartamento: ", lector);
-						verificarCampo(deptoBusqueda);
+						ValidadorCamposUtils.validarDepartamento(deptoBusqueda);
 						
 						String camaBusqueda = solicitarEntrada("\tID Cama: ", lector);
-						verificarCampo(camaBusqueda);
+						ValidadorCamposUtils.validarIdCama(camaBusqueda);
 						
 						String datosPaciente = controlador.mostrarPaciente(camaBusqueda, deptoBusqueda);
 						
@@ -166,12 +168,6 @@ public class Main {
 			JOptionPane.showMessageDialog(null, msg, "EscuTrack", JOptionPane.INFORMATION_MESSAGE);
 		}
 		else System.out.println(msg);
-	}
-	
-	private static void verificarCampo(String msg) throws IllegalArgumentException {
-		if(msg == null || msg.trim().isEmpty()) {
-			throw new IllegalArgumentException("Operación abortada: campo vacío no permitido.");
-		}
 	}
 	
 }
