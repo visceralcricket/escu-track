@@ -1,0 +1,21 @@
+Departamento,IdCama,Prioridad,Ocupada,Rut,Nombre,Gravedad,FechaIngreso
+Traumatologia,T-03,3,false,,,,
+Traumatologia,T-04,4,false,,,,
+Traumatologia,T-01,1,true,22334455-6,Lucas H,3,2026-09-03T14:40
+Traumatologia,T-02,2,true,66778899-0,Valentina S,1,2026-09-04T08:50
+UCI,A-02,2,true,23456789-0,Maria C,4,2026-09-04T10:15
+UCI,A-03,3,false,,,,
+UCI,A-01,1,true,12345678-9,Juan P,5,2026-09-03T08:30
+UCI,A-04,4,true,98765432-1,Pedro L,3,2026-09-04T12:00
+UCI,A-05,5,false,,,,
+Urgencias,U-06,6,true,33445566-7,Yarid F,4,2026-09-04T07:10
+Urgencias,U-05,5,false,,,,
+Urgencias,U-04,4,false,,,,
+Urgencias,U-03,3,true,99887766-5,Carla T,1,2026-09-03T18:30
+Urgencias,U-02,2,true,55667788-9,Luis M,2,2026-09-04T09:20
+Urgencias,U-01,1,true,11223344-5,Ana G,5,2026-09-04T13:45
+Pediatria,P-04,4,false,,,,
+Pediatria,P-03,3,true,77889900-1,Mateo V,2,2026-09-04T11:05
+Pediatria,P-05,5,false,,,,
+Pediatria,P-02,2,false,,,,
+Pediatria,P-01,1,true,44556677-8,Sofia R,1,2026-09-02T16:00

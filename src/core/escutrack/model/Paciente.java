@@ -3,14 +3,19 @@ package core.escutrack.model;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-
 import java.time.LocalDateTime;
-  
- 
-
-
 
 public class Paciente {
+	
+    // Diccionario compacto
+	public static final String[] TRADUCTOR_GRAVEDAD = {
+		"indefinido", // índice 0
+		"estable",
+		"moderado",
+		"urgente",
+		"severo",
+		"crítico"
+	};
 	
 	private String rut;
 	private String nombre;
@@ -60,10 +65,18 @@ public class Paciente {
 		return nivelGravedad;
 	}
 	
+	/* +++
+	 * Renderizado de RUT modificado de tal forma que
+	 * traduzca el valor numérico del nivel de gravedad
+	 * a formato textual haciendo uso del nuevo diccionario
+	 * estático.
+	 * 
+	 * @author Felipe T.S.
+	 --- */
 	@Override
 	public String toString() { //SIA 6	
 	    return "Nombre: " + nombre + "\n" +
-	           "Estado: " + nivelGravedad + "\n" +
+	           "Estado: " + TRADUCTOR_GRAVEDAD[nivelGravedad] + "\n" +
 	           "RUT: " + rut + "\n" +
 	           "Cama asignada: " + idCamaAsignada + "\n" +
 	           "Fecha de ingreso" + fechaIngreso + "\n" + 
