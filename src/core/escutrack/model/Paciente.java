@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import java.time.LocalDateTime;
-  
- 
 
 
 
@@ -79,7 +77,6 @@ public class Paciente {
 	           "Fecha de ingreso" + fechaIngreso + "\n" + 
 	           "Fecha de egreso" + fechaEgreso;
 	}
-	
 	
 	public String getRut() {return rut;}
 	public void setRut(String rut) {this.rut = rut;}
