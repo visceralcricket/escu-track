@@ -2,16 +2,21 @@ package core.escutrack.controller;
 
 // Entidades
 import core.escutrack.model.Paciente;
+import core.escutrack.utils.GestorPersistencia;
 import core.escutrack.model.Cama;
 // Custom exceptions
 import core.escutrack.exceptions.CamaOcupadaException;
 import core.escutrack.exceptions.EntidadNoEncontradaException;
+
+import java.io.IOException;
 // Utilidades
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+// Necesario para cargar base de datos de archivo CSV
+import core.escutrack.utils.GestorPersistencia;
 
 /* +++
  * Este código de aquí busca enlazar la entidad Paciente con una metodología de
@@ -32,8 +37,11 @@ public class ControladorHospital {
 	private Map<String, Map<String, Cama>> mapaDepartamentos;
 	
 	public ControladorHospital() {
-		this.mapaDepartamentos = new HashMap<>();
-		inicializarDatos();
+		this.mapaDepartamentos = new HashMap<>(); // TDA inicializado
+		GestorPersistencia.cargarDatos(this.mapaDepartamentos);
+		if(this.mapaDepartamentos.isEmpty()) {
+			inicializarDatos(); // Crea mapa por defecto si NO existe archivo CSV
+		}
 	}
 	
 	private void inicializarDatos() {
@@ -143,5 +151,14 @@ public class ControladorHospital {
 			return "No se encontraron pacientes con la gravedad: " + gravedad;
 		}
 		return (cadena.toString());
+	/* +++
+	 * Método enfocado en captar posible error de guardado a CSV y
+	 * dirigido principalmente a ser utilizado en el flujo principal
+	 * del programa en Main.
+	 * 
+	 * @author Felipe T.S.
+	 --- */
+	public void apagarSistema() throws IOException {
+		GestorPersistencia.guardarDatos(this.mapaDepartamentos);
 	}
 }
