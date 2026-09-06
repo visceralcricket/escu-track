@@ -151,6 +151,7 @@ public class ControladorHospital {
 			return "No se encontraron pacientes con la gravedad: " + gravedad;
 		}
 		return (cadena.toString());
+	}
 	/* +++
 	 * Método enfocado en captar posible error de guardado a CSV y
 	 * dirigido principalmente a ser utilizado en el flujo principal
