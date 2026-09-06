@@ -46,7 +46,7 @@ public class VentanaPrincipal extends JFrame {
 	            	if(nombre == null) return;
 	            	core.escutrack.utils.ValidadorCamposUtils.validarNombre(nombre);
 	            	
-	            	String gravedad = javax.swing.JOptionPane.showInputDialog(VentanaPrincipal.this, "Gravedad (1-5):");
+	            	String gravedad = javax.swing.JOptionPane.showInputDialog(VentanaPrincipal.this, "Gravedad (ej. estable):");
 	            	core.escutrack.utils.ValidadorCamposUtils.validarGravedad(gravedad);
 	            	
 	            	String depto = javax.swing.JOptionPane.showInputDialog(VentanaPrincipal.this, "Departamento:");

@@ -121,7 +121,7 @@ public class Main {
 					        String nombre = solicitarEntrada("\tNombre: ", lector);
 					        ValidadorCamposUtils.validarNombre(nombre);
 					        
-					        String gravedad = solicitarEntrada("\tGravedad: ", lector);
+					        String gravedad = solicitarEntrada("\tGravedad (ej. estable): ", lector);
 					        ValidadorCamposUtils.validarGravedad(gravedad);
 					        
 					        String depto = solicitarEntrada("\tDepartamento: ", lector);

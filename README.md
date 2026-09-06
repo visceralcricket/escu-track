@@ -43,7 +43,7 @@
 + SIA-4: Colecciones anidadas del JCF (Map<String, Map<String, Cama>>).
 + SIA-5: Sobrecarga de métodos (Cama.setPaciente, Controlador.registrarPaciente).
 + SIA-6: Sobreescritura de métodos (toString en Cama y Paciente).
-+ SIA-7: Menú con Inserción y Mostrar.
+@@ SIA-7 [A MEDIAS]: Menú con Inserción y Mostrar. Falta submenú para la entidad 'ControladorHospital' puesto que actualmente las Camas disponibles se encuentran hard-codeadas y NO se pueden agregar nuevas Camas para asignarles Pacientes.@@
 + SIA-8: Menú con Edición, Eliminación y Búsqueda de entidad Paciente desarrolladas pero NO implementadas en el flujo principal del sistema. @@
 + SIA-9: Funcionalidad de negocio propia (filtrado de pacientes por gravedad).
 @@ SIA-10 [A MEDIAS]: Modos de Consola y Ventana (ahora con 'WindowBuilder Current').@@
