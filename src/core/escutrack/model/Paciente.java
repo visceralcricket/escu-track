@@ -65,6 +65,16 @@ public class Paciente {
 		return nivelGravedad;
 	}
 	
+	public boolean coincideGravedad(String gravedadBuscada) {
+	    try {
+	        // Usa su propio método privado internamente
+	        return this.nivelGravedad == parseGradoGravedad(gravedadBuscada);
+	    } catch (IllegalArgumentException e) {
+	        // Si el usuario busca un término inválido (ej. "hola"), simplemente no coincide
+	        return false;
+	    }
+	}
+	
 	/* +++
 	 * Renderizado de RUT modificado de tal forma que
 	 * traduzca el valor numérico del nivel de gravedad
@@ -82,7 +92,6 @@ public class Paciente {
 	           "Fecha de ingreso" + fechaIngreso + "\n" + 
 	           "Fecha de egreso" + fechaEgreso;
 	}
-	
 	
 	public String getRut() {return rut;}
 	public void setRut(String rut) {this.rut = rut;}

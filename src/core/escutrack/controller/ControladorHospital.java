@@ -12,6 +12,8 @@ import java.io.IOException;
 // Utilidades
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 // Necesario para cargar base de datos de archivo CSV
 import core.escutrack.utils.GestorPersistencia;
@@ -52,6 +54,10 @@ public class ControladorHospital {
 		camasUci.put(cama2.getIdCama(), cama2);
 		
 		this.mapaDepartamentos.put("UCI", camasUci);
+	}
+	
+	public Map<String, Map<String, Cama>> getMapaDepartamentos() {
+		return this.mapaDepartamentos;
 	}
 	
 	public void registrarPaciente(String rut, String nombre, String gradoGravedad, String departamento, String idCama, LocalDateTime fechaIngreso) throws EntidadNoEncontradaException, CamaOcupadaException
@@ -118,6 +124,33 @@ public class ControladorHospital {
 		cama.getPaciente().setNivelGravedad(nuevaGravedad);
 	}
 	
+	public String filtrarPorGravedad(String gravedad) throws EntidadNoEncontradaException {
+		StringBuilder cadena = new StringBuilder();
+		List<String> nombresDptos = new ArrayList<>(mapaDepartamentos.keySet());
+		
+		for (int i = 0; i < nombresDptos.size(); i++) {
+			String nombreDpto = nombresDptos.get(i);
+			Map<String, Cama> camasDelDepartamento = mapaDepartamentos.get(nombreDpto);
+			if (camasDelDepartamento == null) throw new EntidadNoEncontradaException("Departamento inexistente.");
+			List<String> listaIdCamas = new ArrayList<>(camasDelDepartamento.keySet());
+			
+			for (int j = 0; j < listaIdCamas.size(); j++) {
+				String idCama = listaIdCamas.get(j);
+				Cama cama = camasDelDepartamento.get(idCama);
+				
+				if (cama != null && !cama.isDisponible() && cama.getPaciente() != null) {
+					Paciente paciente = cama.getPaciente();
+					if (paciente.coincideGravedad(gravedad)) {
+						cadena.append("Departamento: ").append(nombreDpto).append("\n");
+						cadena.append(paciente.toString()).append("\n\n");
+					}
+				}
+			}
+		}
+		if (cadena.length() == 0) {
+			return "No se encontraron pacientes con la gravedad: " + gravedad;
+		}
+		return (cadena.toString());
 	/* +++
 	 * Método enfocado en captar posible error de guardado a CSV y
 	 * dirigido principalmente a ser utilizado en el flujo principal
