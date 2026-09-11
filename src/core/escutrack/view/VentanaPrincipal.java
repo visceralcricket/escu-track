@@ -45,48 +45,49 @@ public class VentanaPrincipal extends JFrame {
         // Absolute Layout NECESARIO que permite mover cosas libremente
         contentPane.setLayout(null);
         setContentPane(contentPane);
-
-        JButton btnRegistrar = new JButton("1. Registrar nuevo Paciente");
-        // Al usar Absolute Layout, el botón usa coordenadas y tamaño exactos (x, y, ancho, alto)
-        btnRegistrar.setBounds(100, 50, 250, 40);
-        // Al presionar el botón: solicita los datos del paciente mediante cuadros de diálogo,
-        // los valida con ValidadorCamposUtils y delega el registro al controlador.
-        btnRegistrar.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent arg0) {
-
-            	try {
-
-	            	String rut = javax.swing.JOptionPane.showInputDialog(VentanaPrincipal.this, "RUT:");
-	            	if(rut == null) return; // Si el usuario presiona 'cancelar'
-	            	core.escutrack.utils.ValidadorCamposUtils.validarRut(rut);
-
-	            	String nombre = javax.swing.JOptionPane.showInputDialog(VentanaPrincipal.this, "Nombre:");
-	            	if(nombre == null) return;
-	            	core.escutrack.utils.ValidadorCamposUtils.validarNombre(nombre);
-
-	            	String gravedad = javax.swing.JOptionPane.showInputDialog(VentanaPrincipal.this, "Gravedad (ej. estable):");
-	            	core.escutrack.utils.ValidadorCamposUtils.validarGravedad(gravedad);
-
-	            	String depto = javax.swing.JOptionPane.showInputDialog(VentanaPrincipal.this, "Departamento:");
-	            	core.escutrack.utils.ValidadorCamposUtils.validarDepartamento(depto);
-
-	            	String cama = javax.swing.JOptionPane.showInputDialog(VentanaPrincipal.this, "ID Cama:");
-	            	core.escutrack.utils.ValidadorCamposUtils.validarIdCama(cama);
-
-	            	controlador.registrarPaciente(rut, nombre, gravedad, depto, cama);
-	                javax.swing.JOptionPane.showMessageDialog(VentanaPrincipal.this, "Paciente registrado exitosamente.");
-            	}
-
-            	catch(Exception e) {
-            		javax.swing.JOptionPane.showMessageDialog(VentanaPrincipal.this, "[ERROR]: " + e.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-            	}
-
-            }
-        });
-        contentPane.add(btnRegistrar);
-
-
-        JButton btnSalir = new JButton("4. Gaurdar y Salir");
+        
+        mostrarMenuPrincipal();
+    }
+    
+    public void cambiarPanel(JPanel nuevoPanel) {
+    	setContentPane(nuevoPanel);
+    	revalidate();
+    	repaint();
+    }
+    
+    public void mostrarMenuPrincipal() {
+    	contentPane.removeAll();
+    	JButton btnMenuDepartamentos = new JButton("1. Gestión de Departamentos");
+    	btnMenuDepartamentos.setBounds(100,50,250,40);
+    	btnMenuDepartamentos.addActionListener(new ActionListener() {
+    		public void actionPerformed(ActionEvent arg0) {
+    			VentanaDepartamentos submenu = new VentanaDepartamentos(VentanaPrincipal.this, controlador);
+    			cambiarPanel(submenu);
+    		}
+    	});
+    	contentPane.add(btnMenuDepartamentos);
+    	
+    	JButton btnMenuCamas = new JButton("2. Gestión de Camas");
+    	btnMenuCamas.setBounds(100,100,250,40);
+    	btnMenuCamas.addActionListener(new ActionListener() {
+    		public void actionPerformed(ActionEvent arg0) {
+    			VentanaCamas submenu = new VentanaCamas(VentanaPrincipal.this, controlador);
+    			cambiarPanel(submenu);
+    		}
+    	});
+    	contentPane.add(btnMenuCamas);
+    	
+    	JButton btnMenuPacientes = new JButton("3. Gestión de Pacientes");
+    	btnMenuPacientes.setBounds(100,150,250,40);
+    	btnMenuPacientes.addActionListener(new ActionListener() {
+    		public void actionPerformed(ActionEvent arg0) {
+    			VentanaPacientes submenu = new VentanaPacientes(VentanaPrincipal.this, controlador);
+    			cambiarPanel(submenu);
+    		}
+    	});
+    	contentPane.add(btnMenuPacientes);
+    	
+    	JButton btnSalir = new JButton("4. Guardar y Salir");
         btnSalir.setBounds(100, 210, 250, 40);
         // Al presionar el botón: persiste el estado del hospital y cierra el programa.
         btnSalir.addActionListener(new ActionListener() {
@@ -101,14 +102,9 @@ public class VentanaPrincipal extends JFrame {
         	}
         });
         contentPane.add(btnSalir);
-
-        /* +++
-         * TODO: AQUÍ VAN EL RESTO DE BOTONES
-         * Temporalmente solo se agregaron los más esenciales, pero aún
-         * faltan el resto.
-         *
-         * @author Felipe T.S.
-         --- */
-
-    }
+        
+        setContentPane(contentPane);
+        contentPane.revalidate();
+        contentPane.repaint();
+    } 
 }

@@ -139,8 +139,8 @@ public class Paciente {
 	           "Estado: " + TRADUCTOR_GRAVEDAD[nivelGravedad] + "\n" +
 	           "RUT: " + rut + "\n" +
 	           "Cama asignada: " + idCamaAsignada + "\n" +
-	           "Fecha de ingreso" + fechaIngreso + "\n" +
-	           "Fecha de egreso" + fechaEgreso;
+	           "Fecha de ingreso: " + fechaIngreso + "\n" + 
+	           "Fecha de egreso: " + fechaEgreso;
 	}
 
 	/** @return el RUT del paciente */
