@@ -1,7 +1,7 @@
 # **EscuTrack**
 > *Programa de gestión hospitalaria.*
 
-<img src="https://img.shields.io/badge/version-0.2.0-blue" alt="version">
+<img src="https://img.shields.io/badge/version-0.2.1-blue" alt="version">
 
 [![Last Commit](https://img.shields.io/github/last-commit/visceralcricket/escu-track/main)](https://github.com/visceralcricket/infinity-escu-track/commits/main)
 
@@ -87,7 +87,7 @@ java -cp bin core.escutrack.Main
 + SIA-7: Menú con Inserción y Mostrar implementado para colecciones anidadas de Departamentos y Camas de forma independiente.
 + SIA-8: Menú de Consola con Edición, Eliminación y Búsqueda operando bajo validación estricta de regex.
 + SIA-9: Funcionalidad de negocio propia (filtrado de pacientes por gravedad).
-@@ SIA-10 [A MEDIAS]: Modos de Consola y Ventana (ahora con 'WindowBuilder Current').@@
++ SIA-10: Modos de Consola y Ventana (ahora con 'WindowBuilder Current').
 + SIA-11: Implementada persistencia de datos por batch ->  guardado el estado del hospital en un archivo .csv al salir y abrir el programa de forma automática.
 + SIA-12: Implementación de 2 excepciones personalizadas con try-catch (CamaOcupadaException, EntidadNoEncontradaException).
 ```
@@ -111,6 +111,13 @@ java -cp bin core.escutrack.Main
 ```
 # **Changelog - EscuTrack**
 <small>*Nota: Este changelog utiliza fechas en ISO estándar: YY-MM-DD.*</small>
+
+## [0.2.1 - 2026-09-11
+> Finalizada la implementación de todos los botones faltantes para el modo ventana.
+
+### Añadido
+
++ Archivos para cada submenú dentro del módulo de visualización `view` (VentanaPacientes, VentanaCamas, VentanaDepartamentos) para una modularización más limpia.
 
 ## [0.2.0] - 2026-09-11
 > Consolidado flujo de la consola, cierre de requerimientos CRUD y back-end afinado.
