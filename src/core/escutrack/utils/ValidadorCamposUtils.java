@@ -1,7 +1,7 @@
 package core.escutrack.utils;
 
 /* +++
- * Archivo de utilidad cuyo único propósito es validar
+ * Módulo de utilidad cuyo único propósito es validar
  * cada parámetro tratado por el programa de tal forma
  * que NO permita ingresar información que no tiene un
  * formato válido y a la vez garantice el cumplimiento
@@ -53,7 +53,7 @@ public class ValidadorCamposUtils {
 			throw new IllegalArgumentException("\t[!] El departamento no puede estar vacío.");
 		}
 		
-		if(!depto.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\\\s]+$")) {
+		if(!depto.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$")) {
 			throw new IllegalArgumentException("\t[!] El departamento contiene carácteres no permitidos. Use solo letras.");
 		}
 	}
@@ -67,4 +67,14 @@ public class ValidadorCamposUtils {
 			throw new IllegalArgumentException("\t[!] Formato de ID de Cama no válido. Utilice el formato 'Letra-Numero' (ej. A-01).");
 		}
 	}
+	
+	public static void validarPrioridadCama(String prioridadCama) throws IllegalArgumentException {
+		if(prioridadCama == null || prioridadCama.trim().isEmpty()) {
+			throw new IllegalArgumentException("\t[!] La prioridad de la cama no puede estar vacía.");
+		}
+		if(!prioridadCama.matches("^[1-9][0-9]*$")) {
+			throw new IllegalArgumentException("\t[!] Formato de prioridad no válido. Debe ser un número entero positivo mayor a cero.");
+		}
+	}
+	
 }

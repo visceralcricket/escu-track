@@ -2,6 +2,9 @@ package core.escutrack;
 
 import core.escutrack.controller.ControladorHospital;
 
+// Módulo encargado del output por medio de la consola del programa 
+import core.escutrack.view.RenderizadorConsola;
+
 // Validador principal de parámetros
 import core.escutrack.utils.ValidadorCamposUtils;
 import java.io.BufferedReader;
@@ -28,6 +31,11 @@ public class Main {
 		WINDOW_MODE,
 		CONSOLE_MODE
 	}
+	
+	private enum EscutrackMenu {
+		
+	}
+	
 	// Instanciar modo de visualización por defecto a consola (o ventana)
 	public static EscutrackMode currentMode = EscutrackMode.CONSOLE_MODE;
 	
@@ -93,95 +101,47 @@ public class Main {
 				}
 			});
 		}
-		
 		else {
-			
 			System.out.println(mensajeIntroduccion);
 			boolean sistemaActivo = true; 
 			
 			while(sistemaActivo) {
 				String mainMenu = "\t$ -- MENÚ PRINCIPAL -- $\n" +
-				"\t1. Registrar nuevo Paciente\n" +
-				"\t2. Mostrar Paciente específico/a\n" +
-				"\t3. Filtrar Pacientes por gravedad\n" +
-				"\t4. Salir\n\n" +
-				"Seleccione una opción:";
+				"\t1. Gestión de Departamentos\n" +
+				"\t2. Gestión de Camas\n" +
+				"\t3. Gestión de Pacientes\n" +
+				"\t4. Guardar y Salir\n\n" +
+				"Seleccione un módulo:";
 				
 				opcion = solicitarEntrada(mainMenu, lector);
-				// Si cancela el menú, sale del programa
-				if(opcion == null) opcion = "3";
+				if(opcion == null) opcion = "4";
 				
 				switch(opcion) {
 					case "1":
-						System.out.println("\n\t| -- REGISTRO DE PACIENTE -- |");
-					    try {
-					        String rut = solicitarEntrada("\tRUT: ", lector);
-					        ValidadorCamposUtils.validarRut(rut);
-					        
-					        String nombre = solicitarEntrada("\tNombre: ", lector);
-					        ValidadorCamposUtils.validarNombre(nombre);
-					        
-					        String gravedad = solicitarEntrada("\tGravedad (ej. estable): ", lector);
-					        ValidadorCamposUtils.validarGravedad(gravedad);
-					        
-					        String depto = solicitarEntrada("\tDepartamento: ", lector);
-					        ValidadorCamposUtils.validarDepartamento(depto);
-					        
-					        String cama = solicitarEntrada("\tID Cama: ", lector);
-					        ValidadorCamposUtils.validarIdCama(cama);
-					        
-					        controlador.registrarPaciente(rut, nombre, gravedad, depto, cama);
-					        System.out.println("\t-> Paciente registrado exitosamente.");
-					        
-					    }
-					    catch (Exception e) {
-					    	System.out.println("\n\t[ERROR DE REGISTRO]: " + e.getMessage());
-					    }
-					    break;
+						RenderizadorConsola.menuDepartamentos(lector, controlador);
+						break;
 						
 					case "2":
-						System.out.println("\n\t--- BÚSQUEDA DE PACIENTE ---");
-						try { 
-							String deptoBusqueda = solicitarEntrada("\tDepartamento: ", lector);
-							ValidadorCamposUtils.validarDepartamento(deptoBusqueda);
-							
-							String camaBusqueda = solicitarEntrada("\tID Cama: ", lector);
-							ValidadorCamposUtils.validarIdCama(camaBusqueda);
-							
-							String datosPaciente = controlador.mostrarPaciente(camaBusqueda, deptoBusqueda);
-							
-							System.out.println("\tDatos del Paciente:\n" + datosPaciente);
-						}
-						catch(Exception e) {
-							// SIA-12: Captura polimórfica con custom exceptions
-							System.out.println("\n\t[ERROR DE BÚSQUEDA]: " + e.getMessage());
-						}
+						RenderizadorConsola.menuCamas(lector, controlador);
 						break;
-					
-					case "3": 
-						try {
-							String gravedad = solicitarEntrada("\tIngrese gravedad a filtrar: ", lector);
-							String pacienteFiltrado = controlador.filtrarPorGravedad(gravedad);
-							System.out.println(pacienteFiltrado);
-						}
-						catch(Exception e) {
-							System.out.println("\n\t[ERROR DE FILTRADO]: " + e.getMessage());
-						}
+						
+					case "3":
+						RenderizadorConsola.menuPacientes(lector, controlador);
+						break;
 						
 					case "4":
-						System.out.println("Cerrando sistema EscuTrack...");
+						System.out.println("Guardando y cerrando sistema...");
 						try {
-							// Ejecutar método en Controlador para guardar CSV 
 							controlador.apagarSistema();
-						}
+							} 
 						catch (Exception e) {
-							System.out.println("\n\t[ERROR CRÍTICO AL GUARDAR BASE DE DATOS]: " + e.getMessage());
-						}
+							System.out.println("\n\t[ERROR]: " + e.getMessage());
+							}
 						sistemaActivo = false;
 						break;
 						
 					default:
-						System.out.println("\tOpción no válida. Intente nuevamente.");
+						System.out.println("\tOpción no válida.");
 						break;
 				}
 			} // bucle principal consola
