@@ -47,7 +47,7 @@ public class GestorPersistencia {
                         
                         linea.append(DELIMITADOR).append(p.getRut())
                              .append(DELIMITADOR).append(p.getNombre())
-                             .append(DELIMITADOR).append(p.getNivelGravedad())
+                             .append(DELIMITADOR).append(gravedadTextual)
                              .append(DELIMITADOR).append(p.getFechaIngreso().toString());
                     }
                     else {
