@@ -10,24 +10,40 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+/**
+ * Módulo de vista (patrón MVC) que implementa el Modo Ventana del programa
+ * mediante Swing: una interfaz gráfica construida con WindowBuilder que
+ * delega toda la lógica de negocio al {@link ControladorHospital} recibido
+ * por constructor.
+ * <p>
+ * Actualmente solo incluye los botones esenciales de registro de paciente y
+ * guardado/salida (ver TODO al final de la clase); el resto de operaciones
+ * disponibles en el Modo Consola aún no tienen equivalente gráfico.
+ */
 public class VentanaPrincipal extends JFrame {
 
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
-    private ControladorHospital controlador;    
+    private ControladorHospital controlador;
 
+    /**
+     * Construye y arma la ventana principal del Modo Ventana, incluyendo
+     * sus botones y el comportamiento asociado a cada uno.
+     *
+     * @param controlador controlador con la lógica de negocio del hospital, usado por los botones de la ventana
+     */
     // Único constructor que exige el controlador y arma la ventana
     public VentanaPrincipal(ControladorHospital controlador) {
-    	
+
         this.controlador = controlador;
-        
+
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 450, 300);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-        
+
         // Absolute Layout NECESARIO que permite mover cosas libremente
-        contentPane.setLayout(null); 
+        contentPane.setLayout(null);
         setContentPane(contentPane);
         
         mostrarMenuPrincipal();
@@ -73,6 +89,7 @@ public class VentanaPrincipal extends JFrame {
     	
     	JButton btnSalir = new JButton("4. Guardar y Salir");
         btnSalir.setBounds(100, 210, 250, 40);
+        // Al presionar el botón: persiste el estado del hospital y cierra el programa.
         btnSalir.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
         		try {
