@@ -10,15 +10,56 @@
 
 ## **Cómo compilar y ejecutar el programa**
 
-1. **Paso:** texto...
+### Requisitos
+* JDK 8 o superior (el proyecto está compilado con compliance 1.8, pero corre sin problemas en versiones más nuevas como 11, 17 o 21).
+* No requiere librerías externas ni gestor de dependencias (Maven/Gradle): solo usa la biblioteca estándar de Java (`java.util`, `java.io`, `java.time`, `javax.swing`, `java.awt`).
 
-2. **Paso:** texto...
-  ```bash
-  comando ruta/hacia/escu-track
-  ```
+### Importante: directorio de trabajo
+El programa lee y guarda datos en `src/core/escutrack/resources/datos_hospital.csv` mediante una **ruta relativa**. Por eso, sin importar el IDE, **siempre debe ejecutarse desde la carpeta raíz del proyecto** (`escu-track/`). Si se ejecuta desde otra carpeta, no va a encontrar ni guardar correctamente los datos.
 
-  * Configurar codificación (Obligatorio en Windows): Para que la terminal dibuje correctamente el arte ASCII, las tildes y los bordes del mapa, ejecute:
-  > [Console]::OutputEncoding = [System.text.Encoding]::UTF8
+### Codificación de caracteres (tildes, ñ, bordes ASCII)
+El código fuente usa tildes y caracteres especiales. Para evitar errores al compilar o texto ilegible en consola:
+
+* Compilar siempre con el flag `-encoding UTF-8`.
+* En Windows (CMD/PowerShell), antes de ejecutar, correr:
+  > `[Console]::OutputEncoding = [System.Text.Encoding]::UTF8`
+* En Linux/macOS normalmente no hace falta, ya que la terminal usa UTF-8 por defecto.
+
+### Opción A: Ejecutar desde Eclipse
+1. `File → Import... → Git → Projects from Git` (o `Existing Projects into Workspace` si ya se clonó el repositorio).
+2. Eclipse reconoce el proyecto automáticamente gracias a los archivos `.project` y `.classpath` ya incluidos.
+3. Clic derecho sobre `Main.java` → `Run As → Java Application`.
+   * Eclipse usa por defecto la raíz del proyecto como directorio de trabajo, así que no hay que configurar nada más.
+
+### Opción B: Ejecutar desde otro IDE (IntelliJ, VS Code, NetBeans)
+1. Abrir la carpeta `escu-track/` como proyecto.
+2. Marcar `src` como carpeta de código fuente (*Source Root* / *Sources Folder*).
+3. Configurar la clase principal: `core.escutrack.Main`.
+4. **Importante:** en la configuración de ejecución (*Run Configuration*), fijar el *Working directory* en la carpeta raíz del proyecto (`escu-track/`), no en `src` ni en la carpeta del IDE.
+
+### Opción C: Compilar y ejecutar por línea de comandos
+Desde la carpeta raíz del proyecto (`escu-track/`):
+
+```bash
+# Compilar (Linux/macOS)
+javac -encoding UTF-8 -d bin $(find src -name "*.java")
+
+# Ejecutar
+java -cp bin core.escutrack.Main
+```
+
+```powershell
+# Compilar (Windows PowerShell)
+javac -encoding UTF-8 -d bin (Get-ChildItem -Recurse -Filter *.java -Path src).FullName
+
+# Ejecutar
+java -cp bin core.escutrack.Main
+```
+
+### Notas sobre plataforma
+* El **Modo Consola** funciona en cualquier sistema operativo sin restricciones.
+* El **Modo Ventana** usa `javax.swing`/`java.awt`, por lo que necesita un entorno gráfico (no funciona en servidores sin interfaz gráfica / modo headless).
+* El script `extract_version.bat` (actualiza automáticamente el número de versión) **solo funciona en Windows**. En Linux/macOS el programa muestra una advertencia en consola y sigue funcionando con normalidad, usando el número ya guardado en `resources/version.txt`.
 
 ## **Distribución de directorios**
 <pre><code><i><span style="color: #00fed4ed;">Cómo se organiza el código?</span></i></code></pre>
