@@ -44,14 +44,25 @@ public class ControladorHospital {
 		}
 	}
 	
+	/* +++
+	 * TODO: ELIMINAR inicializarDatos
+	 * actualmente las camas del hospital están hard-codeadas en ControladorHospital:
+	 * hay que ELIMINAR este método y crear un submenú que permita agregar
+	 * nuveas camas de forma manual.
+	 * 
+	 * @author Felipe T.S.
+	 --- */
+	
 	private void inicializarDatos() {
 		Map<String, Cama> camasUci = new HashMap<>();
 		
 		Cama cama1 = new Cama("A-01", 1);
 		Cama cama2 = new Cama("A-02", 2);
+		Cama cama3 = new Cama("A-03", 3);
 		
 		camasUci.put(cama1.getIdCama(), cama1);
 		camasUci.put(cama2.getIdCama(), cama2);
+		camasUci.put(cama3.getIdCama(), cama3);
 		
 		this.mapaDepartamentos.put("UCI", camasUci);
 	}

@@ -38,13 +38,14 @@ public class ValidadorCamposUtils {
 	}
 	
 	public static void validarGravedad(String gravedad) throws IllegalArgumentException {
-		if(gravedad == null || gravedad.trim().isEmpty()) {
-			throw new IllegalArgumentException("\t[!] La gravedad no puede estar vacía.");
-		}
-		
-		if(!gravedad.matches("^[1-5]$")) {
-			throw new IllegalArgumentException("\t[!] La gravedad debe ser un número entero entre 1 y 5.");
-		}
+	    if(gravedad == null || gravedad.trim().isEmpty()) {
+	        throw new IllegalArgumentException("\t[!] La gravedad no puede estar vacía.");
+	    }
+	    
+	    // (?i) hace que sea insensible a mayúsculas / minúsculas
+	    if(!gravedad.matches("^(?i)(estable|moderado|urgente|severo|critico)$")) {
+	        throw new IllegalArgumentException("\t[!] La gravedad debe ser: estable, moderado, urgente, severo o critico.");
+	    }
 	}
 	
 	public static void validarDepartamento(String depto) throws IllegalArgumentException {

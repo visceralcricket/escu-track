@@ -1,7 +1,7 @@
 # **EscuTrack**
 > *Programa de gestión hospitalaria.*
 
-<img src="https://img.shields.io/badge/version-0.1.3-blue" alt="version">
+<img src="https://img.shields.io/badge/version-0.1.5-blue" alt="version">
 
 [![Last Commit](https://img.shields.io/github/last-commit/visceralcricket/escu-track/main)](https://github.com/visceralcricket/infinity-escu-track/commits/main)
 
@@ -43,12 +43,12 @@
 + SIA-4: Colecciones anidadas del JCF (Map<String, Map<String, Cama>>).
 + SIA-5: Sobrecarga de métodos (Cama.setPaciente, Controlador.registrarPaciente).
 + SIA-6: Sobreescritura de métodos (toString en Cama y Paciente).
-+ SIA-7: Menú con Inserción y Mostrar.
-- SIA-8 [PENDIENTE]: Menú con Edición, Eliminación y Búsqueda de entidad Paciente desarrolladas pero NO implementadas en el flujo principal del sistema.
+@@ SIA-7 [A MEDIAS]: Menú con Inserción y Mostrar. Falta submenú para la entidad 'ControladorHospital' puesto que actualmente las Camas disponibles se encuentran hard-codeadas y NO se pueden agregar nuevas Camas para asignarles Pacientes.@@
++ SIA-8: Menú con Edición, Eliminación y Búsqueda de entidad Paciente desarrolladas pero NO implementadas en el flujo principal del sistema. @@
 + SIA-9: Funcionalidad de negocio propia (filtrado de pacientes por gravedad).
-+ SIA-10: Modos de Consola y Ventana funcionando correctamente.
-- SIA-11 [NO IMPLEMENTADO]: Implementar persistencia de datos batch. Guardar el estado del hospital en un archivo .csv al salir y cargarlo al iniciar.
-+ SIA-12: Implementación de 2 excepciones personalizadas con try-catch (CamaOcupadaException, EntidadNoEncontradaException). 
+@@ SIA-10 [A MEDIAS]: Modos de Consola y Ventana (ahora con 'WindowBuilder Current').@@
++ SIA-11: Implementada persistencia de datos por batch ->  guardado el estado del hospital en un archivo .csv al salir y abrir el programa de forma automática.
++ SIA-12: Implementación de 2 excepciones personalizadas con try-catch (CamaOcupadaException, EntidadNoEncontradaException).
 ```
 
 ## **Funcionalidades pendientes** 
@@ -57,7 +57,7 @@
 + front-end en archivo Main.java
 
 @@ A nivel de lógica de procedimientos / sistemas @@
-- [PENDIENTE]: Añadir funcionalidad de alternar Modo Ventana con modo consola (preguntar al iniciar el programa cuál modo se desea usar y alternar front-end dependiendo de esto mismo).
++ [RESUELTO]: Añadir funcionalidad de alternar Modo Ventana con modo consola (preguntar al iniciar el programa cuál modo se desea usar y alternar front-end dependiendo de esto mismo).
 ```
 ## **Problemas conocidos**
 
@@ -70,6 +70,21 @@
 ```
 # **Changelog - EscuTrack**
 <small>*Nota: Este changelog utiliza fechas en ISO estándar: YY-MM-DD.*</small>
+
+## [0.1.5] - 2026-09-06
+> Transición a patrón MVC para interfaz gráfica y refactorización de flujos de ejecución.
+
+### Añadido
+
++ Versión inicial de `VentanaPrincipal.java` en el (nuevo) módulo `core.escutrack.view` utilizando *WindowBuilder Current* para construir y gestionar el entorno gráfico de forma independiente del flujo principal.
+
+### Cambios
+
++ Refactorización del flujo principal en `Main.java` para adaptarlo al nuevo entorno gráfico autónomo y aislar los hilos de ejecución del Modo Consola y el Modo Ventana.
+
++ Eliminadas validaciones de Modo Actual en el ciclo base obsoletas tras la separación del la interfaz gráfica del Modo Consola.
+
++ Eliminada excepción personalizada en pro de mantener simplicidad y abstracción mediante la asignación de `IllegalArgumentException` para todos los campos leídos por el programa que presenten formatos no válidos.
 
 ## [0.1.4] - 2026-09-02
 > Creación de funcionalidad filtrarPorGravedad
@@ -121,6 +136,7 @@
 
 ## [0.1.1] - 2026-08-16
 > Añadida automatización de número de versión en el ciclo principal del programa
+
 ### Añadido
 + Script `extract_version.bat` creado para transmitir el número de versión actual del sistema al ciclo principal del mismo en `Main.java`
 + Front-end básico en `Main.java`.

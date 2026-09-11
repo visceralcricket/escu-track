@@ -14,7 +14,7 @@ public class Paciente {
 		"moderado",
 		"urgente",
 		"severo",
-		"crítico"
+		"critico"
 	};
 	
 	private String rut;
