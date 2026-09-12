@@ -61,6 +61,8 @@ java -cp bin core.escutrack.Main
 * El **Modo Ventana** usa `javax.swing`/`java.awt`, por lo que necesita un entorno gráfico (no funciona en servidores sin interfaz gráfica / modo headless).
 * El script `extract_version.bat` (actualiza automáticamente el número de versión) **solo funciona en Windows**. En Linux/macOS el programa muestra una advertencia en consola y sigue funcionando con normalidad, usando el número ya guardado en `resources/version.txt`.
 
+**IMPORTANTE:** Al intentar añadir un nuevo departamento en el submenú de gestión correspondiente, se debe agregar por lo menos **1** elemento a dicho departamento: es decir, por lo menos **una cama**. De lo contrario, al cerrar y guardar el programa, este **NO** preservará el nombre del departamento (que a fines prácticos está vacío) en el archivo CSV de datos_hospital.
+
 ## **Distribución de directorios**
 <pre><code><i><span style="color: #00fed4ed;">Cómo se organiza el código?</span></i></code></pre>
 
