@@ -63,7 +63,7 @@ public class ControladorHospital {
 	 * fue eliminado en favor de agregar departamentos y camas de forma manual por
 	 * el staff médico.
 	 *
-	 * @since 0.1.6
+	 * @since 0.2.0
 	 * @author Felipe T.S.
 	 --- */
 

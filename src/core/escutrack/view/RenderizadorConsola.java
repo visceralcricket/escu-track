@@ -42,7 +42,7 @@ public class RenderizadorConsola {
 
 		boolean enMenu = true;
 		while(enMenu) {
-			String mainMenu = "\t$ -- MENÚ PACIENTES -- $\n" +
+			String mainMenu = "\n\t$ -- MENÚ PACIENTES -- $\n" +
 			"\t1. Registrar nuevo Paciente\n" +
 			"\t2. Mostrar Paciente específico/a\n" +
 			"\t3. Filtrar Pacientes por gravedad\n" +

@@ -1,17 +1,11 @@
 package core.escutrack.view;
 
 import core.escutrack.controller.ControladorHospital;
-import core.escutrack.exceptions.EntidadNoEncontradaException;
-import core.escutrack.model.Cama;
 import core.escutrack.utils.ValidadorCamposUtils;
 
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.awt.event.ActionEvent;
 
 public class VentanaDepartamentos extends JPanel {

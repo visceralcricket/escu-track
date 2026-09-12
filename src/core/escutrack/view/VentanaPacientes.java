@@ -69,7 +69,7 @@ public class VentanaPacientes extends JPanel {
 	            	core.escutrack.utils.ValidadorCamposUtils.validarIdCama(cama);
 	            	
 	            	String pacienteEncontrado = controlador.mostrarPaciente(cama, depto);
-	                javax.swing.JOptionPane.showMessageDialog(ventana, "--- BÚSQUEDA DE PACIENTE --- \n" + pacienteEncontrado);
+	                javax.swing.JOptionPane.showMessageDialog(ventana, "--- BÚSQUEDA DE PACIENTE --- \n\n" + pacienteEncontrado);
 	        	}
 	        	
 	        	catch(Exception e) {
@@ -91,7 +91,7 @@ public class VentanaPacientes extends JPanel {
 	            	core.escutrack.utils.ValidadorCamposUtils.validarGravedad(gravedad);
 	            	
 	            	String pacientes = controlador.filtrarPorGravedad(gravedad);
-	                javax.swing.JOptionPane.showMessageDialog(ventana, "Datos de pacientes encontrados: " + pacientes);
+	                javax.swing.JOptionPane.showMessageDialog(ventana, "--- PACIENTE ENCONTRADOS ---\n\n" + pacientes);
 	        	}
 	        	
 	        	catch(Exception e) {

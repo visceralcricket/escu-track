@@ -1,4 +1,4 @@
 Departamento,IdCama,Prioridad,Ocupada,Rut,Nombre,Gravedad,FechaIngreso
-UCI,A-02,2,false,,,,
-UCI,A-03,3,true,12345678-9,Juan,estable,2026-09-06T15:42:38.406
-UCI,A-01,1,false,,,,
+aaa,A-02,2,false,,,,
+aaa,A-03,3,true,12345678-9,Juan,estable,2026-09-06T15:42:38.406
+aaa,A-01,1,false,,,,
