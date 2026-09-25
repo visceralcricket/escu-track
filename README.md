@@ -1,7 +1,7 @@
 # **EscuTrack**
 > *Programa de gestión hospitalaria.*
 
-<img src="https://img.shields.io/badge/version-0.2.2-blue" alt="version">
+<img src="https://img.shields.io/badge/version-0.2.3-blue" alt="version">
 
 [![Last Commit](https://img.shields.io/github/last-commit/visceralcricket/escu-track/main)](https://github.com/visceralcricket/infinity-escu-track/commits/main)
 
@@ -113,6 +113,19 @@ java -cp bin core.escutrack.Main
 ```
 # **Changelog - EscuTrack**
 <small>*Nota: Este changelog utiliza fechas en ISO estándar: YY-MM-DD.*</small>
+
+## [0.2.3] - 2026-09-24
+> Añadidas funcionalidades faltantes de versión anterior a modo Ventana
+
+### Añadido
+
++ Funcionalidades previamente mencionadas de búsqueda de Departamento/Cama y edición de Paciente a sus respectivas Ventanas.
++ Mejoras considerables a las visuales de las Ventanas -> ahora tienen dimensiones estándares de mayor tamaño (512x512) para mejor visibilidad y claridad del sistema para el usuario.
++ Arreglado **bug** que surgió durante el desarrollo donde el plugin de WindowBuilder instalado en el proyecto **NO** permitía abrir `VentanaPrincipal` en modo *Diseño*: esto parece haber ocurrido debido a que el parseador del plugin tuvo problemas a la hora de leer sintaxis de llamadas a métodos, por ejemplo los métodos que se encontraban anidados en el código fuente de `VentanaPrincipal` -> por esto, se reestructuró el código fuente de dicha Ventana mediante `CardLayout` para mitigar este error
+
+### Cambios
+
++ Arreglos generales para mejores prácticas a lo largo de los códigos fuentes de las Ventanas: renombrar botones de `btnRegistrarPaciente` a `btnRegistrar`, `btnEliminarDepartamento` a `btnEliminar`, etc -> esto con el fin de estandarizar los descriptores de las funcionalidades, reservando nombres más específicos a las funcionalidades más complejas como `btnFiltrarPorGravedad`.
 
 ## [0.2.2] - 2026-09-24
 > Implementadas funcionalidades faltantes al modo consola
