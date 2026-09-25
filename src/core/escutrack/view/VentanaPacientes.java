@@ -16,7 +16,7 @@ public class VentanaPacientes extends JPanel {
 		
 		JButton btnRegistrar = new JButton("1. Registrar nuevo Paciente");
 	    // Al usar Absolute Layout, el botón usa coordenadas y tamaño exactos (x, y, ancho, alto)
-	    btnRegistrar.setBounds(100, 50, 250, 40); 
+	    btnRegistrar.setBounds(128, 84, 250, 40); 
 	    btnRegistrar.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent arg0) {
 	        	
@@ -54,9 +54,10 @@ public class VentanaPacientes extends JPanel {
 	    });
 	    add(btnRegistrar);
 	    
-	    JButton btnMostrarPaciente = new JButton("2. Mostrar Paciente específico");
-	    btnMostrarPaciente.setBounds(100, 100, 250, 40); 
-	    btnMostrarPaciente.addActionListener(new ActionListener() {
+	    // Editado formato de "Mostrar paciente específico" a simplemente "buscar paciente".
+	    JButton btnBuscar = new JButton("2. Buscar Paciente");
+	    btnBuscar.setBounds(128, 149, 250, 40); 
+	    btnBuscar.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent arg0) {
 	        	
 	        	try {
@@ -69,7 +70,7 @@ public class VentanaPacientes extends JPanel {
 	            	core.escutrack.utils.ValidadorCamposUtils.validarIdCama(cama);
 	            	
 	            	String pacienteEncontrado = controlador.mostrarPaciente(cama, depto);
-	                javax.swing.JOptionPane.showMessageDialog(ventana, "--- BÚSQUEDA DE PACIENTE --- \n" + pacienteEncontrado);
+	                javax.swing.JOptionPane.showMessageDialog(ventana, "--- BÚSQUEDA DE PACIENTE --- \n\n" + pacienteEncontrado);
 	        	}
 	        	
 	        	catch(Exception e) {
@@ -78,10 +79,10 @@ public class VentanaPacientes extends JPanel {
 	            
 	        }
 	    });
-	    add(btnMostrarPaciente);
+	    add(btnBuscar);
 	    
 	    JButton btnFiltrarGravedad = new JButton("3. Filtrar Pacientes por gravedad");
-	    btnFiltrarGravedad.setBounds(100, 150, 250, 40); 
+	    btnFiltrarGravedad.setBounds(128, 213, 250, 40); 
 	    btnFiltrarGravedad.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent arg0) {
 	        	
@@ -91,7 +92,7 @@ public class VentanaPacientes extends JPanel {
 	            	core.escutrack.utils.ValidadorCamposUtils.validarGravedad(gravedad);
 	            	
 	            	String pacientes = controlador.filtrarPorGravedad(gravedad);
-	                javax.swing.JOptionPane.showMessageDialog(ventana, "Datos de pacientes encontrados: " + pacientes);
+	                javax.swing.JOptionPane.showMessageDialog(ventana, "--- PACIENTE ENCONTRADOS ---\n\n" + pacientes);
 	        	}
 	        	
 	        	catch(Exception e) {
@@ -102,8 +103,64 @@ public class VentanaPacientes extends JPanel {
 	    });
 	    add(btnFiltrarGravedad);
 	    
+	    JButton btnEditar = new JButton("4. Editar Pacientes");
+	    btnEditar.setBounds(128, 279, 250, 40); 
+	    btnEditar.addActionListener(new ActionListener() {
+	    	public void actionPerformed(ActionEvent arg0) {
+	        	
+	    		try {
+	            	String depto = javax.swing.JOptionPane.showInputDialog(ventana, "Departamento:");
+	            	if(depto == null) return;
+	            	core.escutrack.utils.ValidadorCamposUtils.validarDepartamento(depto);
+	            	
+	            	String cama = javax.swing.JOptionPane.showInputDialog(ventana, "ID Cama:");
+	            	if(cama == null) return;
+	            	core.escutrack.utils.ValidadorCamposUtils.validarIdCama(cama);
+	            	
+					String nuevoNombre = javax.swing.JOptionPane.showInputDialog(ventana, "Nuevo nombre:");
+	            	if(nuevoNombre == null) return;
+	            	core.escutrack.utils.ValidadorCamposUtils.validarNombre(nuevoNombre);
+	            	
+					String nuevaGravedad = javax.swing.JOptionPane.showInputDialog(ventana, "Nueva gravedad:");
+	            	if(nuevaGravedad == null) return;
+	            	core.escutrack.utils.ValidadorCamposUtils.validarGravedad(nuevaGravedad);
+
+					controlador.editarPaciente(depto, cama, nuevoNombre, nuevaGravedad);
+	                javax.swing.JOptionPane.showMessageDialog(ventana, "Paciente editado.");
+	        	}
+	    		catch(Exception e) {
+	        		javax.swing.JOptionPane.showMessageDialog(ventana, "[ERROR]: " + e.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+	        	}
+	        }
+	    });
+	    add(btnEditar);
+	    
+	    JButton btnEliminar= new JButton("5. Dar de alta (Eliminar)");
+	    btnEliminar.setBounds(128, 346, 250, 40); 
+	    btnEliminar.addActionListener(new ActionListener() {
+	    	public void actionPerformed(ActionEvent arg0) {
+	        	
+	    		try {
+	            	String depto = javax.swing.JOptionPane.showInputDialog(ventana, "Departamento:");
+	            	if(depto == null) return;
+	            	core.escutrack.utils.ValidadorCamposUtils.validarDepartamento(depto);
+	            	
+	            	String cama = javax.swing.JOptionPane.showInputDialog(ventana, "ID Cama del paciente a eliminar:");
+	            	if(cama == null) return;
+	            	core.escutrack.utils.ValidadorCamposUtils.validarIdCama(cama);
+	            	
+					controlador.eliminarPaciente(cama, depto);
+	                javax.swing.JOptionPane.showMessageDialog(ventana, "Paciente dado de alta (eliminado).");
+	        	}
+	    		catch(Exception e) {
+	        		javax.swing.JOptionPane.showMessageDialog(ventana, "[ERROR]: " + e.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+	        	}
+	        }
+	    });
+	    add(btnEliminar);
+	    
 	    JButton btnVolver = new JButton("Regresar al menú principal");
-	    btnVolver.setBounds(100, 210, 250, 40);
+	    btnVolver.setBounds(128, 412, 250, 40);
 	    btnVolver.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent arg0) {
 	    		ventana.mostrarMenuPrincipal();

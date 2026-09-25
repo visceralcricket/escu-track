@@ -14,9 +14,6 @@ import java.io.IOException;
 // Constructor de scripts -> necesario para ejecutar archivos batch
 import java.lang.ProcessBuilder;
 
-// Necesario para abrir programa en ventanas
-import javax.swing.JOptionPane;
-
 // Necesarios para lanzar la ventana principal con WindowBuilder
 import core.escutrack.view.VentanaPrincipal;
 import java.awt.EventQueue;
@@ -44,10 +41,6 @@ public class Main {
 	private enum EscutrackMode {
 		WINDOW_MODE,
 		CONSOLE_MODE
-	}
-
-	private enum EscutrackMenu {
-
 	}
 
 	/** Modo de visualización actualmente activo (por defecto, consola). */

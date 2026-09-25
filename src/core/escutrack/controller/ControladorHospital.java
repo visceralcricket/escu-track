@@ -55,17 +55,14 @@ public class ControladorHospital {
 	public ControladorHospital() {
 		this.mapaDepartamentos = new HashMap<>(); // TDA inicializado
 		GestorPersistencia.cargarDatos(this.mapaDepartamentos);
+		/* +++
+		 * En caso de que no exista archivo CSV tras intentar cargarlo, por defecto
+		 * creamos una cantidad finita de datos de ejemplo.
+		 --- */
+		if(this.mapaDepartamentos == null || this.mapaDepartamentos.isEmpty()) {
+			inicializarDatos();
+		}
 	}
-
-	/* +++
-	 * @deprecated
-	 * método inicializarDatos, encargado de hard-codear departamentos y camas iniciales
-	 * fue eliminado en favor de agregar departamentos y camas de forma manual por
-	 * el staff médico.
-	 *
-	 * @since 0.1.6
-	 * @author Felipe T.S.
-	 --- */
 
 	/**
 	 * Registra un nuevo departamento vacío (sin camas) en el hospital.
@@ -80,6 +77,23 @@ public class ControladorHospital {
 		this.mapaDepartamentos.put(nombreDepto, new HashMap<>());
 	}
 
+	/* Inyección y creación de data por defecto.
+	 * 
+	 * @param cama1 y cama2 -> ejemplos hard-codeados en caso de que, por algún
+	 * motivo, no exista ningún archivo CSV en el directorio de recursos / resources.
+	 */
+	private void inicializarDatos() {
+		Map<String, Cama> camasUci = new HashMap<>();
+		
+		Cama cama1 = new Cama("A-01", 1);
+		Cama cama2 = new Cama("A-02", 2);
+		
+		camasUci.put(cama1.getIdCama(), cama1);
+		camasUci.put(cama2.getIdCama(), cama2);
+		
+		this.mapaDepartamentos.put("UCI", camasUci);
+	} 
+	
 	/**
 	 * Registra una nueva cama, inicialmente libre, dentro de un
 	 * departamento existente.
@@ -359,7 +373,38 @@ public class ControladorHospital {
 
 		return paciente.toString(); // Retornar String
 	}
-
+	// Búsqueda específica de un departamento (SIA-8)
+	public String buscarDepartamento(String nombreDepto) throws EntidadNoEncontradaException {
+		Map<String, Cama> camas = this.mapaDepartamentos.get(nombreDepto);
+		if(camas == null) throw new EntidadNoEncontradaException("Departamento inexistente.");
+		
+		return "Departamento: " + nombreDepto + "\nTotal camas registradas: " + camas.size();
+	}
+	
+	// Búsqueda específica de una Cama (SIA-8)
+	public String buscarCama(String nombreDepto, String idCama) throws EntidadNoEncontradaException {
+		Map<String, Cama> camas = this.mapaDepartamentos.get(nombreDepto);
+		if(camas == null) throw new EntidadNoEncontradaException("Departamento inexistente.");
+		
+		Cama cama = camas.get(idCama);
+		if(cama == null) throw new EntidadNoEncontradaException("La cama no existe en ese departamento.");
+		
+		return cama.toString();
+	}
+	
+	// Editar los datos de un paciente ya registrado (SIA-8)
+	public void editarPaciente(String depto, String idCama, String nuevoNombre, String nuevaGravedad) throws EntidadNoEncontradaException {
+		Map<String, Cama> camas = this.mapaDepartamentos.get(depto);
+		if(camas == null) throw new EntidadNoEncontradaException("Departamento inexistente.");
+		
+		Cama cama = camas.get(idCama);
+		if(cama == null) throw new EntidadNoEncontradaException("Cama no válida.");
+		if(cama.isDisponible() || cama.getPaciente() == null) throw new EntidadNoEncontradaException("La cama no tiene un paciente asignado.");
+		
+		cama.getPaciente().setNombre(nuevoNombre);
+		cama.getPaciente().setNivelGravedad(nuevaGravedad);
+	}
+	
 	/**
 	 * Modifica el nivel de gravedad del paciente asignado a una cama.
 	 *

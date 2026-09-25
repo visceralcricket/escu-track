@@ -3,7 +3,7 @@
 set "ROOT_DIR=%~dp0"
 set "README_PATH=%ROOT_DIR%README.md"
 
-:: la ruta de salida debe apuntar a la carpeta de recursos de tu código fuente
+:: la ruta de salida debe apuntar a la carpeta de recursos del código fuente
 set "OUTPUT_PATH=%ROOT_DIR%src\core\escutrack\resources\version.txt"
 
 if not exist "%README_PATH%" (

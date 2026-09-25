@@ -42,7 +42,7 @@ public class RenderizadorConsola {
 
 		boolean enMenu = true;
 		while(enMenu) {
-			String mainMenu = "\t$ -- MENÚ PACIENTES -- $\n" +
+			String mainMenu = "\n\t$ -- MENÚ PACIENTES -- $\n" +
 			"\t1. Registrar nuevo Paciente\n" +
 			"\t2. Mostrar Paciente específico/a\n" +
 			"\t3. Filtrar Pacientes por gravedad\n" +
@@ -138,9 +138,10 @@ public class RenderizadorConsola {
 			String menu = "\n\t--- MÓDULO DEPARTAMENTOS ---\n" +
 			"\t1. Agregar Departamento\n" +
 			"\t2. Mostrar Departamentos\n" +
-			"\t3. Editar Departamento\n" +
-			"\t4. Eliminar Departamento\n" +
-			"\t5. Volver al menú principal\n" +
+			"\t3. Buscar Departamento\n" +
+			"\t4. Editar Departamento\n" +
+			"\t5. Eliminar Departamento\n" +
+			"\t6. Volver al menú principal\n" +
 			"Opción: ";
 
 			String opcion = solicitarEntrada(menu, lector);
@@ -162,8 +163,19 @@ public class RenderizadorConsola {
 				case "2":
 					System.out.println(controlador.mostrarDepartamentos());
 					break;
-
+				
 				case "3":
+					try {
+						String nombreDepto = solicitarEntrada("Nombre del departamento a buscar: ", lector);
+						ValidadorCamposUtils.validarDepartamento(nombreDepto);
+						System.out.println(controlador.buscarDepartamento(nombreDepto));
+					}
+					catch(Exception e) {
+						System.out.println("\t[ERROR]: " + e.getMessage());
+					}
+					break;
+					
+				case "4":
 					try {
 						String nombreActual = solicitarEntrada("Nombre del departamento a editar: ", lector);
 						ValidadorCamposUtils.validarDepartamento(nombreActual);
@@ -179,7 +191,7 @@ public class RenderizadorConsola {
 					}
 					break;
 
-				case "4":
+				case "5":
 					try {
 						String nombreDepto = solicitarEntrada("Nombre del departamento a eliminar: ", lector);
 						ValidadorCamposUtils.validarDepartamento(nombreDepto);
@@ -191,7 +203,7 @@ public class RenderizadorConsola {
 					}
 					break;
 
-				case "5":
+				case "6":
 					enMenu = false;
 					break;
 
@@ -216,9 +228,10 @@ public class RenderizadorConsola {
 			String menu = "\n\t--- MÓDULO CAMAS ---\n" +
 			"\t1. Agregar Cama a Departamento\n" +
 			"\t2. Mostrar Camas de Departamento particular\n" +
-			"\t3. Editar Cama\n" +
-			"\t4. Eliminar Cama por ID\n" +
-			"\t5. Regresar al menú principal.\n" +
+			"\t3. Buscar Cama.\n" +
+			"\t4. Editar Cama\n" +
+			"\t5. Eliminar Cama por ID\n" +
+			"\t6. Regresar al menú principal.\n" +
 			"Opción: ";
 
 			String opcion = solicitarEntrada(menu, lector);
@@ -255,8 +268,22 @@ public class RenderizadorConsola {
 						System.out.println("\t[ERROR]: " + e.getMessage());
 					}
 					break;
-
+				
 				case "3":
+					try {
+						String depto = solicitarEntrada("Departamento de la cama a buscar: ", lector);
+						ValidadorCamposUtils.validarDepartamento(depto);
+						String id = solicitarEntrada("ID de la Cama: ", lector);
+						ValidadorCamposUtils.validarIdCama(id);
+						
+						System.out.println(controlador.buscarCama(depto, id));
+					}
+					catch(Exception e) {
+						System.out.println("\t[ERROR]: " + e.getMessage());
+					}
+					break;
+					
+				case "4":
 					try {
 						String depto = solicitarEntrada("Departamento de la cama a editar:", lector);
 						ValidadorCamposUtils.validarDepartamento(depto);
@@ -278,7 +305,7 @@ public class RenderizadorConsola {
 					}
 					break;
 
-				case "4":
+				case "5":
 					try {
 						String depto = solicitarEntrada("Departamento de la cama a eliminar:", lector);
 						ValidadorCamposUtils.validarDepartamento(depto);
@@ -294,7 +321,7 @@ public class RenderizadorConsola {
 					}
 					break;
 
-				case "5":
+				case "6":
 					enMenu = false;
 					break;
 
