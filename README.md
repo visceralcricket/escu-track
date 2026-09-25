@@ -1,7 +1,7 @@
 # **EscuTrack**
 > *Programa de gestión hospitalaria.*
 
-<img src="https://img.shields.io/badge/version-0.2.1-blue" alt="version">
+<img src="https://img.shields.io/badge/version-0.2.2-blue" alt="version">
 
 [![Last Commit](https://img.shields.io/github/last-commit/visceralcricket/escu-track/main)](https://github.com/visceralcricket/infinity-escu-track/commits/main)
 
@@ -113,6 +113,21 @@ java -cp bin core.escutrack.Main
 ```
 # **Changelog - EscuTrack**
 <small>*Nota: Este changelog utiliza fechas en ISO estándar: YY-MM-DD.*</small>
+
+## [0.2.2] - 2026-09-24
+> Implementadas funcionalidades faltantes al modo consola
+
+### Añadido
+
++ Métodos de búsqueda de entidades Departamento, Cama y edición de datos de Paciente.
++ Actualizado `RenderizadorConsola` para mostrar dichas funciones nuevas.
++ Lógica de programa para crear automáticamente (hard-codear) un archivo CSV *predeterminado* en caso de que el archivo almacenado por el programa se elimine, corrompa o le ocurra cualquier eventualidad que imposibilite su procesamiento por el sistema.
+
+### Pendiente
+```diff
+- Implementar dichas funciones en el modo Ventana (`VentanaDepartamentos`, `VentanaCamas` y `VentanaPacientes`).
+- Modificar SIA-6 -> método toString puesto que no aplica polimorfismo real.
+```
 
 ## [0.2.1 - 2026-09-11
 > Finalizada la implementación de todos los botones faltantes para el modo ventana.
