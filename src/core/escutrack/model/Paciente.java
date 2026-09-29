@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
  *
  * @author Felipe T.S.
  */
-public class Paciente {
+public class Paciente extends EntidadHospitalaria {
 
     /**
      * Diccionario compacto que traduce el nivel de gravedad numérico
@@ -80,7 +80,17 @@ public class Paciente {
 		map.put("critico",5);
 		ESTADO_CLINICO = Collections.unmodifiableMap(map);
 	}
-
+	
+	@Override
+	public String evaluarEstadoOperativo() {
+		if(this.nivelGravedad >= 3) {
+			return "[CRÍTICO]: Requiere monitoreo activo. Gravedad: " + TRADUCTOR_GRAVEDAD[this.nivelGravedad];
+		}
+		else {
+			return "[REGULAR]: Paciente estable en observación general.";
+		}
+	}
+	
 	/**
 	 * Convierte una etiqueta textual de gravedad (ej. "Estable") a su
 	 * valor entero interno, sin distinguir mayúsculas/minúsculas ni
@@ -131,18 +141,39 @@ public class Paciente {
 	 * estado de gravedad (ya traducido a texto), RUT, cama asignada y
 	 * fechas de ingreso/egreso.
 	 *
-	 * @return cadena con el detalle del paciente
+	 * @return cadena con los detalles del paciente
 	 */
 	@Override
 	public String toString() { //SIA 6
+		
+		java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("dd/MM/yy HH:mm");
+		
+		String ingresoStr = (fechaIngreso != null) ? fechaIngreso.format(formatter) : "Ninguna";
+		String egresoStr = (fechaEgreso!= null) ? fechaEgreso.format(formatter) : "Ninguna (aún internado)";
+		String camaStr = (idCamaAsignada != null) ? idCamaAsignada : "Ninguna";
+		
 	    return "Nombre: " + nombre + "\n" +
 	           "Estado: " + TRADUCTOR_GRAVEDAD[nivelGravedad] + "\n" +
 	           "RUT: " + rut + "\n" +
-	           "Cama asignada: " + idCamaAsignada + "\n" +
-	           "Fecha de ingreso: " + fechaIngreso + "\n" + 
-	           "Fecha de egreso: " + fechaEgreso;
+	           "Cama asignada: " + camaStr + "\n" +
+	           "Fecha de ingreso: " + ingresoStr+ "\n" + 
+	           "Fecha de egreso: " + egresoStr;
 	}
-
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(this == obj) return true;
+		if(obj == null || getClass() != obj.getClass()) return false;
+		
+		Paciente otroPaciente = (Paciente) obj;
+		return this.rut.equalsIgnoreCase(otroPaciente.rut);
+	}
+	
+	@Override
+	public int hashCode() {
+		return rut != null ? rut.toLowerCase().hashCode() : 0;
+	}
+	
 	/** @return el RUT del paciente */
 	public String getRut() {return rut;}
 	/** @param rut nuevo RUT del paciente */

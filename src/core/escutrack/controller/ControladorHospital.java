@@ -342,15 +342,8 @@ public class ControladorHospital {
 		// No se puede eliminar paciente de cama que está vacía
 		if(cama.isDisponible()) throw new EntidadNoEncontradaException("La cama ya está vacía.");
 
-		cama.setPaciente(); // versión sin argumentos: limpia paciente y marca disponible = true
+		cama.liberarCama(); // versión sin argumentos de setPaciente: limpia paciente y marca disponible = true
 	}
-
-	/* +++
-	 * mostrarPaciente modificado para que retorne un String en vez de simplemente
-	 * imprimir Paciente: delegar tarea de renderizado y visualización al front-end.
-	 *
-	 * @author Felipe T.S.
-	 --- */
 
 	/**
 	 * Obtiene la representación textual del paciente asignado a una cama.
@@ -370,8 +363,11 @@ public class ControladorHospital {
 
 		Paciente paciente = cama.getPaciente();
 		if(paciente == null) throw new EntidadNoEncontradaException("Cama sin paciente asignado.");
-
-		return paciente.toString(); // Retornar String
+		
+		// Uso de lógica polimórfica heredada de EntidadHospitalaria
+		String estadoOperativo = paciente.evaluarEstadoOperativo();
+		
+		return "--- " + estadoOperativo + " ---\n" + paciente.toString();
 	}
 	// Búsqueda específica de un departamento (SIA-8)
 	public String buscarDepartamento(String nombreDepto) throws EntidadNoEncontradaException {
@@ -389,7 +385,9 @@ public class ControladorHospital {
 		Cama cama = camas.get(idCama);
 		if(cama == null) throw new EntidadNoEncontradaException("La cama no existe en ese departamento.");
 		
-		return cama.toString();
+		// SIA-6 -> uso de lógica polimórfica heredada de EntidadHospitalaria
+		String estadoOperativo = cama.evaluarEstadoOperativo();
+		return "--- " + estadoOperativo + " ---\n" + cama.toString();
 	}
 	
 	// Editar los datos de un paciente ya registrado (SIA-8)
