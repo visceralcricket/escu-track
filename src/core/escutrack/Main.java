@@ -5,8 +5,6 @@ import core.escutrack.controller.ControladorHospital;
 // Módulo encargado del output por medio de la consola del programa
 import core.escutrack.view.RenderizadorConsola;
 
-// Validador principal de parámetros
-import core.escutrack.utils.ValidadorCamposUtils;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
@@ -89,7 +87,7 @@ public class Main {
 		System.out.println("¿Qué modo de visualización desea ejecutar el programa?\n1) Modo Consola\n2) Modo Ventana");
 
 		while(true) {
-			opcion = solicitarEntrada("Ingrese 1 o 2:", lector);
+			opcion = RenderizadorConsola.solicitarEntrada("Ingrese 1 o 2:", lector);
 			if(opcion.equals("1")) {
 				currentMode = EscutrackMode.CONSOLE_MODE;
 				break;
@@ -101,7 +99,7 @@ public class Main {
 			System.out.println("Opción no válida. Intente de nuevo.");
 		}
 
-		String mensajeIntroduccion = "\n\n\t| -- INICIO DE SISTEMA - ESCUTRACK " +
+		String mensajeIntroduccion = "\n\n\t| -- INICIO DE SISTEMA - ESCUTRACK v" +
 		currentVersion +" -- |\n";
 
 		if(currentMode == EscutrackMode.WINDOW_MODE) {
@@ -118,64 +116,8 @@ public class Main {
 			});
 		}
 		else {
-			System.out.println(mensajeIntroduccion);
-			boolean sistemaActivo = true;
-
-			while(sistemaActivo) {
-				String mainMenu = "\t$ -- MENÚ PRINCIPAL -- $\n" +
-				"\t1. Gestión de Departamentos\n" +
-				"\t2. Gestión de Camas\n" +
-				"\t3. Gestión de Pacientes\n" +
-				"\t4. Guardar y Salir\n\n" +
-				"Seleccione un módulo:";
-
-				opcion = solicitarEntrada(mainMenu, lector);
-				if(opcion == null) opcion = "4";
-
-				switch(opcion) {
-					case "1":
-						RenderizadorConsola.menuDepartamentos(lector, controlador);
-						break;
-
-					case "2":
-						RenderizadorConsola.menuCamas(lector, controlador);
-						break;
-
-					case "3":
-						RenderizadorConsola.menuPacientes(lector, controlador);
-						break;
-
-					case "4":
-						System.out.println("Guardando y cerrando sistema...");
-						try {
-							controlador.apagarSistema();
-							}
-						catch (Exception e) {
-							System.out.println("\n\t[ERROR]: " + e.getMessage());
-							}
-						sistemaActivo = false;
-						break;
-
-					default:
-						System.out.println("\tOpción no válida.");
-						break;
-				}
-			} // bucle principal consola
+			RenderizadorConsola renderizador = new RenderizadorConsola();
+			renderizador.iniciar(controlador, lector, mensajeIntroduccion);
 		}
 	} // main
-
-	/**
-	 * Imprime un mensaje de solicitud y lee la siguiente línea ingresada
-	 * por el usuario desde la consola.
-	 *
-	 * @param msg    mensaje a mostrar antes de leer la entrada
-	 * @param lector lector de entrada estándar ya abierto
-	 * @return la línea ingresada por el usuario (puede ser {@code null} si se cierra el flujo de entrada)
-	 * @throws IOException si ocurre un error al leer la entrada
-	 */
-	private static String solicitarEntrada(String msg, BufferedReader lector) throws IOException {
-		System.out.print(msg + " ");
-		return lector.readLine();
-	}
-
 }

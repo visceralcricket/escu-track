@@ -12,7 +12,7 @@ package core.escutrack.model;
  *
  * @author Felipe T.S.
  */
-public class Cama {
+public class Cama extends EntidadHospitalaria {
 	private String idCama;
 	private boolean disponible;
 	private Paciente pacienteActual;
@@ -45,7 +45,16 @@ public class Cama {
 	    this(idCama, true, null, prioridad);
 	}
 
-
+	@Override
+	public String evaluarEstadoOperativo() {
+		if(this.disponible) {
+			return "[OPERATIVA]: Cama libre con prioridad de atención nivel " + this.prioridad;
+		}
+		else {
+			return "[BLOQUEADA]: Cama ocupada actualmente por un paciente.";
+		}
+	}
+	
 	/**
 	 * Devuelve una representación textual de la cama, incluyendo su id,
 	 * estado de disponibilidad y el paciente asignado (si existe).
@@ -59,8 +68,21 @@ public class Cama {
 				"\nEstado:" + this.disponible +
 				"\nPaciente en la cama actual:\n" + this.pacienteActual;
 	}
-
-
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(this == obj) return true;
+		if(obj == null || getClass() != obj.getClass()) return false;
+		
+		Cama otraCama = (Cama) obj;
+		return this.idCama.equalsIgnoreCase(otraCama.idCama);
+	}
+	
+	@Override
+	public int hashCode() {
+		return idCama != null ? idCama.toLowerCase().hashCode() : 0; 
+	}
+	
 	/**
 	 * Asigna un paciente a la cama y la marca automáticamente como ocupada.
 	 *
@@ -73,12 +95,10 @@ public class Cama {
 	}
 
 	/**
-	 * Sobrecarga (SIA-5) que limpia el paciente asignado a la cama y la
-	 * marca automáticamente como disponible. Se utiliza al dar de alta a
-	 * un paciente.
+	 * Sobrecarga (SIA-5)
+	 * Da de alta al paciente actual, liberando la cama para nuevos ingresos.
 	 */
-	public void setPaciente() //SIA 5
-	{
+	public void liberarCama() {
 		this.pacienteActual = null;
 		this.disponible = true;
 	}

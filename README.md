@@ -1,7 +1,7 @@
 # **EscuTrack**
 > *Programa de gestión hospitalaria.*
 
-<img src="https://img.shields.io/badge/version-0.2.3-blue" alt="version">
+<img src="https://img.shields.io/badge/version-0.2.4-blue" alt="version">
 
 [![Last Commit](https://img.shields.io/github/last-commit/visceralcricket/escu-track/main)](https://github.com/visceralcricket/infinity-escu-track/commits/main)
 
@@ -114,8 +114,24 @@ java -cp bin core.escutrack.Main
 # **Changelog - EscuTrack**
 <small>*Nota: Este changelog utiliza fechas en ISO estándar: YY-MM-DD.*</small>
 
+## [0.2.4] - 2026-09-29
+> Mejoras de QOL, consolidación de Polimorfismo, herencia y limpieza de responsabilidades.
+
+### Añadido
+
++ Clase abstracta `EntidadHospitalaria` para compartir el comportamiento del método `evaluarEstadoOperativo` tanto en la entidad Cama como Paciente y consolidar el uso correcto de Polimorfismo.
++ Las clases `Paciente` y `Cama` ahora extienden de `EntidadHospitalaria` y sobreescriben `evaluarEstadoOperativo` siguiendo lógica y flujo procedimental coherente con el negocio (área médica) -> SIA-6.
++ Implementación de los métodos `evaluarEstadoOperativo` a nivel de controlador para que esta se ejecute al llamar a las operaciones de búsqueda/visualización de pacientes y camas.
++ Sobreescritura de `equals(Object)` y `hashCode()` en los módulos `Paciente` y `Cama` para evaluar la coincidencia de las entidades basándose en sus RUT e ID de Cama respectivamente y utilizar una lógica de evaluación que no se encuentre limitada por `Object`.
++ Implementación de formateo directo (DateTimeFormatter) a las variables locales `localDateTime` en el método `toString` del módulo `Paciente` para mostrar de forma más clara cuando las fechas de ingreso/egreso no existen -> en vez de simplemente mostrar `null`, se indica `Ninguna/Ninguna (aún internado)`.
+
+### Cambios
+
++ Trasladada la lógica del bucle de renderizado a nivel de consola a un nuevo método `iniciar` dentro del módulo `RenderizadorConsola` con el objetivo de simplificar `Main` y respetar su responsabilidad única de control del flujo principal del programa -> es decir, se eliminó la tarea de renderizar el menú inicial desde `Main` a `RenderizadorConsola`.
++ Eliminado anti-patrón `setPaciente` sin atributos, reemplazándolo por `liberarCama` para mantener la funcionalidad y sobrecarga requeridas pero con un nombre y propósito más adecuado al negocio en cuestión.
+
 ## [0.2.3] - 2026-09-24
-> Añadidas funcionalidades faltantes de versión anterior a modo Ventana
+> Añadidas funcionalidades faltantes de versión anterior a modo Ventana.
 
 ### Añadido
 
@@ -128,7 +144,7 @@ java -cp bin core.escutrack.Main
 + Arreglos generales para mejores prácticas a lo largo de los códigos fuentes de las Ventanas: renombrar botones de `btnRegistrarPaciente` a `btnRegistrar`, `btnEliminarDepartamento` a `btnEliminar`, etc -> esto con el fin de estandarizar los descriptores de las funcionalidades, reservando nombres más específicos a las funcionalidades más complejas como `btnFiltrarPorGravedad`.
 
 ## [0.2.2] - 2026-09-24
-> Implementadas funcionalidades faltantes al modo consola
+> Implementadas funcionalidades faltantes al modo consola.
 
 ### Añadido
 

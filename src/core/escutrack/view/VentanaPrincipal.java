@@ -96,12 +96,12 @@ public class VentanaPrincipal extends JFrame {
 
         JButton btnSalir = new JButton("4. Guardar y Salir");
         btnSalir.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent arg0) {
                 try {
                     controlador.apagarSistema();
                     System.exit(0);
-                } catch (Exception ex) {
-                    javax.swing.JOptionPane.showMessageDialog(VentanaPrincipal.this, "Error al guardar: " + ex.getMessage());
+                } catch (Exception e) {
+                    javax.swing.JOptionPane.showMessageDialog(VentanaPrincipal.this, "Error al guardar: " + e.getMessage());
                 }
             }
         });
