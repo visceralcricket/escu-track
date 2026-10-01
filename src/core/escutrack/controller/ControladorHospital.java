@@ -15,8 +15,9 @@ import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-// Necesario para cargar base de datos de archivo CSV
+// Utilidades: cargar base datos archivo CSV y validar parámetros recibidos.
 import core.escutrack.utils.GestorPersistencia;
+import core.escutrack.utils.ValidadorCamposUtils;
 
 /* +++
  * @apiNote
@@ -71,6 +72,7 @@ public class ControladorHospital {
 	 * @throws IllegalArgumentException si ya existe un departamento con ese nombre
 	 */
 	public void agregarDepartamento(String nombreDepto) throws IllegalArgumentException {
+		ValidadorCamposUtils.validarDepartamento(nombreDepto); // <- nueva validación.
 		if(this.mapaDepartamentos.containsKey(nombreDepto)) {
 			throw new IllegalArgumentException("[!] El departamento ya existe.");
 		}
@@ -146,6 +148,8 @@ public class ControladorHospital {
 	 * @throws IllegalArgumentException     si ya existe otro departamento con el nuevo nombre
 	 */
 	public void editarDepartamento(String nombreActual, String nuevoNombre) throws EntidadNoEncontradaException, IllegalArgumentException {
+		ValidadorCamposUtils.validarDepartamento(nombreActual);
+		ValidadorCamposUtils.validarDepartamento(nuevoNombre);
 		Map<String, Cama> camasDelDepto = this.mapaDepartamentos.get(nombreActual);
 		if(camasDelDepto == null) {
 			throw new EntidadNoEncontradaException("[!] Departamento inexistente.");
@@ -291,7 +295,7 @@ public class ControladorHospital {
 	 * @throws EntidadNoEncontradaException si el departamento o la cama no existen
 	 * @throws CamaOcupadaException         si la cama ya está ocupada por otro paciente
 	 */
-	public void registrarPaciente(String rut, String nombre, String gradoGravedad, String departamento, String idCama, LocalDateTime fechaIngreso) throws EntidadNoEncontradaException, CamaOcupadaException
+	public void registrarPaciente(String rut, String nombre, int nivelGravedad, String departamento, String idCama, LocalDateTime fechaIngreso) throws EntidadNoEncontradaException, CamaOcupadaException
 	{
 		Map<String, Cama> camasDelDepartamento = this.mapaDepartamentos.get(departamento);
 		if (camasDelDepartamento == null) throw new EntidadNoEncontradaException("Departamento inexistente.");
@@ -302,7 +306,7 @@ public class ControladorHospital {
 		if (!cama.isDisponible()) throw new CamaOcupadaException("La cama '" + idCama + "' ya está ocupada.");
 
 
-		Paciente nuevoPaciente = new Paciente(rut, nombre, gradoGravedad, fechaIngreso);
+		Paciente nuevoPaciente = new Paciente(rut, nombre, nivelGravedad, fechaIngreso);
 		nuevoPaciente.setIdCamaAsignada(idCama);
 
 		cama.setPaciente(nuevoPaciente); // ya deja disponible = false internamente
@@ -320,8 +324,8 @@ public class ControladorHospital {
 	 * @throws EntidadNoEncontradaException si el departamento o la cama no existen
 	 * @throws CamaOcupadaException         si la cama ya está ocupada por otro paciente
 	 */
-	public void registrarPaciente(String rut, String nombre, String gradoGravedad, String departamento, String idCama) throws EntidadNoEncontradaException, CamaOcupadaException { // SIA 5
-	    registrarPaciente(rut, nombre, gradoGravedad, departamento, idCama, LocalDateTime.now());
+	public void registrarPaciente(String rut, String nombre, int nivelGravedad, String departamento, String idCama) throws EntidadNoEncontradaException, CamaOcupadaException { // SIA 5
+	    registrarPaciente(rut, nombre, nivelGravedad, departamento, idCama, LocalDateTime.now());
 	}
 
 	/**
@@ -391,7 +395,7 @@ public class ControladorHospital {
 	}
 	
 	// Editar los datos de un paciente ya registrado (SIA-8)
-	public void editarPaciente(String depto, String idCama, String nuevoNombre, String nuevaGravedad) throws EntidadNoEncontradaException {
+	public void editarPaciente(String depto, String idCama, String nuevoNombre, int nivelGravedad) throws EntidadNoEncontradaException {
 		Map<String, Cama> camas = this.mapaDepartamentos.get(depto);
 		if(camas == null) throw new EntidadNoEncontradaException("Departamento inexistente.");
 		
@@ -400,7 +404,7 @@ public class ControladorHospital {
 		if(cama.isDisponible() || cama.getPaciente() == null) throw new EntidadNoEncontradaException("La cama no tiene un paciente asignado.");
 		
 		cama.getPaciente().setNombre(nuevoNombre);
-		cama.getPaciente().setNivelGravedad(nuevaGravedad);
+		cama.getPaciente().setNivelGravedad(nivelGravedad);
 	}
 	
 	/**
@@ -414,7 +418,7 @@ public class ControladorHospital {
 	 * @throws IllegalArgumentException     si el ID de cama no es válido dentro del departamento
 	 * @throws IllegalStateException        si la cama está vacía (sin paciente que modificar)
 	 */
-	public void modificarGravedadPaciente(String idCama, String departamento, String nuevaGravedad) throws EntidadNoEncontradaException, CamaOcupadaException {
+	public void modificarGravedadPaciente(String idCama, String departamento, int nuevaGravedad) throws EntidadNoEncontradaException, CamaOcupadaException {
 		Map<String, Cama> camasDelDepartamento = this.mapaDepartamentos.get(departamento);
 		if(camasDelDepartamento == null) throw new EntidadNoEncontradaException("Departamento inexistente.");
 
@@ -435,13 +439,17 @@ public class ControladorHospital {
 	 * @return listado con el departamento y el detalle de cada paciente que coincide, o un mensaje si no se encontró ninguno
 	 * @throws EntidadNoEncontradaException si algún departamento del mapa interno no pudo resolverse (caso excepcional)
 	 */
-	public String filtrarPorGravedad(String gravedad) throws EntidadNoEncontradaException {
+	public String filtrarPorGravedad(int gravedad) throws EntidadNoEncontradaException {
+		// Validación de gravedad recibida.
+		ValidadorCamposUtils.validarGravedad(gravedad);
+		
 		StringBuilder cadena = new StringBuilder();
 		List<String> nombresDptos = new ArrayList<>(mapaDepartamentos.keySet());
 
 		for (int i = 0; i < nombresDptos.size(); i++) {
 			String nombreDpto = nombresDptos.get(i);
 			Map<String, Cama> camasDelDepartamento = mapaDepartamentos.get(nombreDpto);
+			
 			if (camasDelDepartamento == null) throw new EntidadNoEncontradaException("Departamento inexistente.");
 			List<String> listaIdCamas = new ArrayList<>(camasDelDepartamento.keySet());
 
@@ -459,7 +467,8 @@ public class ControladorHospital {
 			}
 		}
 		if (cadena.length() == 0) {
-			return "No se encontraron pacientes con la gravedad: " + gravedad;
+			// Traducir gravedad numérica a textual para el feedback del usuario
+			return "No se encontraron pacientes con la gravedad: " + ValidadorCamposUtils.traducirGravedad(gravedad);
 		}
 		return (cadena.toString());
 	}

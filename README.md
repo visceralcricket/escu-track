@@ -1,7 +1,7 @@
 # **EscuTrack**
 > *Programa de gestión hospitalaria.*
 
-<img src="https://img.shields.io/badge/version-0.2.4-blue" alt="version">
+<img src="https://img.shields.io/badge/version-0.2.5-blue" alt="version">
 
 [![Last Commit](https://img.shields.io/github/last-commit/visceralcricket/escu-track/main)](https://github.com/visceralcricket/infinity-escu-track/commits/main)
 
@@ -114,6 +114,19 @@ java -cp bin core.escutrack.Main
 # **Changelog - EscuTrack**
 <small>*Nota: Este changelog utiliza fechas en ISO estándar: YY-MM-DD.*</small>
 
+## [0.2.5] - 2026-10-01
+> Refactorización de persistencia, tipado de datos y delegación de responsabilidades.
+
+### Añadido
+
++ Implementadas validaciones tempranas obligatorias con el módulo `ValidadorCamposUtils` directamente en los constructores y setters de los modelos `Paciente`, `Cama`y en `ControladorHospital`. Esto con el objetivo de reforzar el encapsulamiento y evitar la instanciación de entidades con parámetros inválidos.
++ Creadas sobrecargas lógicas para el método `traducirGravedad` en `ValidadorCamposUtils`. Este módulo ahora actúa como puente entre los *Strings* ingresados o leídos por las vistas (front-end) y los *enteros* numéricos procesados por el backend.
+
+### Cambios
+
++ **[Refactorización crítica]**: El sistema de prioridades y niveles de gravedad clínica fue reescrito para operar exclusivamente con valores enteros (`int`) en el backend (`ControladorHospital`, `Paciente`) y en la persistencia (`GestorPersistencia`) con el fin de reducir el acoplamiento al mínimo y solucionar el fallo de diseño de almacenar la gravedad como texto en `datos_hospital.csv`.
++ Eliminado el anti-patrón de diseño de sobrecarga vacía (`setPaciente()` nulo) en la clase `Cama`, reemplazándolo por el método `liberarCama()` para asignarle una semántica correcta y coherente con las reglas del negocio hospitalario (SIA-5).
+
 ## [0.2.4] - 2026-09-29
 > Mejoras de QOL, consolidación de Polimorfismo, herencia y limpieza de responsabilidades.
 
@@ -127,7 +140,7 @@ java -cp bin core.escutrack.Main
 
 ### Cambios
 
-+ Trasladada la lógica del bucle de renderizado a nivel de consola a un nuevo método `iniciar` dentro del módulo `RenderizadorConsola` con el objetivo de simplificar `Main` y respetar su responsabilidad única de control del flujo principal del programa -> es decir, se eliminó la tarea de renderizar el menú inicial desde `Main` a `RenderizadorConsola`.
++ Trasladada la lógica del bucle de renderizado a nivel de consola a un nuevo método `iniciar` dentro del módulo `RenderizadorConsola` con el objetivo de simplificar `Main` y respetar su responsabilidad única de control del flujo principal del programa -> es decir, se eliminó la tarea de renderizar el menú inicial desde `Main` a `RenderizadorConsola` (SIA-3).
 + Eliminado anti-patrón `setPaciente` sin atributos, reemplazándolo por `liberarCama` para mantener la funcionalidad y sobrecarga requeridas pero con un nombre y propósito más adecuado al negocio en cuestión.
 
 ## [0.2.3] - 2026-09-24

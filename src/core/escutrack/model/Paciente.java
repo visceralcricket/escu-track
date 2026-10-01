@@ -4,6 +4,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.time.LocalDateTime;
+// Realizar verificaciones de parámetros recibidos
+import core.escutrack.utils.ValidadorCamposUtils;
 
 /**
  * Representa a un paciente ingresado en el hospital.
@@ -16,19 +18,6 @@ import java.time.LocalDateTime;
  * @author Felipe T.S.
  */
 public class Paciente extends EntidadHospitalaria {
-
-    /**
-     * Diccionario compacto que traduce el nivel de gravedad numérico
-     * interno (usado como índice) a su representación textual.
-     */
-	public static final String[] TRADUCTOR_GRAVEDAD = {
-		"indefinido", // índice 0
-		"estable",
-		"moderado",
-		"urgente",
-		"severo",
-		"critico"
-	};
 
 	private String rut;
 	private String nombre;
@@ -48,10 +37,14 @@ public class Paciente extends EntidadHospitalaria {
 	 * @param fechaIngreso  fecha y hora en que el paciente ingresó al establecimiento
 	 * @throws IllegalArgumentException si {@code gradoGravedad} no corresponde a un valor reconocido
 	 */
-	public Paciente (String rut, String nombre, String gradoGravedad,LocalDateTime fechaIngreso){
+	public Paciente (String rut, String nombre, int nivelGravedad,LocalDateTime fechaIngreso){
+		ValidadorCamposUtils.validarRut(rut);
+		ValidadorCamposUtils.validarNombre(nombre);
+		ValidadorCamposUtils.validarGravedad(nivelGravedad);
+		
 		this.rut = rut;
 		this.nombre= nombre;
-		this.nivelGravedad= parseGradoGravedad(gradoGravedad);
+		this.nivelGravedad= nivelGravedad;
 		this.idCamaAsignada= null;
 		this.fechaIngreso = fechaIngreso;
 		this.fechaEgreso = null;
@@ -63,51 +56,15 @@ public class Paciente extends EntidadHospitalaria {
 	 * para poder asignar los niveles de gravedad con la menor complejidad temporal
 	 * posible haciendo uso de sus etiquetas cualitativas como keys.
 	 --- */
-
-	/**
-	 * Tabla hash inmutable que asigna cada etiqueta textual de gravedad
-	 * (en minúsculas) a su valor entero interno.
-	 */
-	private static final Map<String, Integer> ESTADO_CLINICO;
-
-	static {
-		Map<String, Integer> map = new HashMap<>();
-		map.put("indefinido",0);
-		map.put("estable",1);
-		map.put("moderado",2);
-		map.put("urgente",3);
-		map.put("severo",4);
-		map.put("critico",5);
-		ESTADO_CLINICO = Collections.unmodifiableMap(map);
-	}
 	
 	@Override
 	public String evaluarEstadoOperativo() {
 		if(this.nivelGravedad >= 3) {
-			return "[CRÍTICO]: Requiere monitoreo activo. Gravedad: " + TRADUCTOR_GRAVEDAD[this.nivelGravedad];
+			return "[CRÍTICO]: Requiere monitoreo activo. Gravedad: " + ValidadorCamposUtils.traducirGravedad(this.nivelGravedad);
 		}
 		else {
 			return "[REGULAR]: Paciente estable en observación general.";
 		}
-	}
-	
-	/**
-	 * Convierte una etiqueta textual de gravedad (ej. "Estable") a su
-	 * valor entero interno, sin distinguir mayúsculas/minúsculas ni
-	 * espacios en los extremos.
-	 *
-	 * @param gradoGravedad etiqueta textual de gravedad, o {@code null}
-	 * @return el nivel de gravedad numérico correspondiente ({@code 0} si {@code gradoGravedad} es {@code null})
-	 * @throws IllegalArgumentException si la etiqueta no corresponde a ningún valor reconocido
-	 */
-	private static int parseGradoGravedad(String gradoGravedad) {
-		if(gradoGravedad == null) return 0;
-
-		Integer nivelGravedad = ESTADO_CLINICO.get(gradoGravedad.trim().toLowerCase());
-		if(nivelGravedad == null) {
-			throw new IllegalArgumentException("Nivel de gravedad desconocido: " + nivelGravedad);
-		}
-		return nivelGravedad;
 	}
 
 	/**
@@ -115,17 +72,11 @@ public class Paciente extends EntidadHospitalaria {
 	 * etiqueta textual buscada. Se usa para el filtrado de pacientes por
 	 * gravedad (SIA-9).
 	 *
-	 * @param gravedadBuscada etiqueta textual de gravedad a comparar
-	 * @return {@code true} si coincide; {@code false} si no coincide o si {@code gravedadBuscada} no es una etiqueta válida
+	 * @param gravedadBuscada valor numéricoa comparar
+	 * @return {@code true} si coincide; {@code false} si no coincide o si {@code gravedadBuscada} no es un grado de gravedad válido
 	 */
-	public boolean coincideGravedad(String gravedadBuscada) {
-	    try {
-	        // Usa su propio método privado internamente
-	        return this.nivelGravedad == parseGradoGravedad(gravedadBuscada);
-	    } catch (IllegalArgumentException e) {
-	        // Si el usuario busca un término inválido (ej. "hola"), simplemente no coincide
-	        return false;
-	    }
+	public boolean coincideGravedad(int gravedadBuscada) {
+		return (this.nivelGravedad == gravedadBuscada);
 	}
 
 	/* +++
@@ -153,7 +104,7 @@ public class Paciente extends EntidadHospitalaria {
 		String camaStr = (idCamaAsignada != null) ? idCamaAsignada : "Ninguna";
 		
 	    return "Nombre: " + nombre + "\n" +
-	           "Estado: " + TRADUCTOR_GRAVEDAD[nivelGravedad] + "\n" +
+	           "Estado: " + ValidadorCamposUtils.traducirGravedad(nivelGravedad) + "\n" +
 	           "RUT: " + rut + "\n" +
 	           "Cama asignada: " + camaStr + "\n" +
 	           "Fecha de ingreso: " + ingresoStr+ "\n" + 
@@ -177,12 +128,18 @@ public class Paciente extends EntidadHospitalaria {
 	/** @return el RUT del paciente */
 	public String getRut() {return rut;}
 	/** @param rut nuevo RUT del paciente */
-	public void setRut(String rut) {this.rut = rut;}
+	public void setRut(String rut) {
+		ValidadorCamposUtils.validarRut(rut);
+		this.rut = rut;
+		}
 
 	/** @return el nombre del paciente */
 	public String getNombre() {return nombre;}
 	/** @param nombre nuevo nombre del paciente */
-	public void setNombre(String nombre) {this.nombre = nombre;}
+	public void setNombre(String nombre) {
+		ValidadorCamposUtils.validarNombre(nombre);
+		this.nombre = nombre;
+		}
 
 	/** @return el nivel de gravedad del paciente, como valor entero interno */
 	public int getNivelGravedad() {return nivelGravedad;}
@@ -190,12 +147,18 @@ public class Paciente extends EntidadHospitalaria {
 	 * @param gradoGravedad nuevo nivel de gravedad en formato textual (ej. "critico")
 	 * @throws IllegalArgumentException si la etiqueta no corresponde a ningún valor reconocido
 	 */
-	public void setNivelGravedad(String gradoGravedad) {this.nivelGravedad = parseGradoGravedad(gradoGravedad);}
+	public void setNivelGravedad(int nivelGravedad) {
+		ValidadorCamposUtils.validarGravedad(nivelGravedad);
+		this.nivelGravedad = nivelGravedad;
+		}
 
 	/** @return el id de la cama asignada al paciente, o {@code null} si no tiene */
 	public String getIdCamaAsignada() {return this.idCamaAsignada;}
 	/** @param idCamaAsignada nuevo id de cama asignada al paciente */
-	public void setIdCamaAsignada(String idCamaAsignada) {this.idCamaAsignada = idCamaAsignada;}
+	public void setIdCamaAsignada(String idCamaAsignada) {
+		ValidadorCamposUtils.validarIdCama(idCamaAsignada);
+		this.idCamaAsignada = idCamaAsignada;
+		}
 
 	/** @return la fecha y hora de ingreso del paciente */
 	public LocalDateTime getFechaIngreso() {return fechaIngreso;}

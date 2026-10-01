@@ -121,8 +121,8 @@ public class RenderizadorConsola {
 					        String nombre = solicitarEntrada("\tNombre: ", lector);
 					        ValidadorCamposUtils.validarNombre(nombre);
 	
-					        String gravedad = solicitarEntrada("\tGravedad (ej. estable): ", lector);
-					        ValidadorCamposUtils.validarGravedad(gravedad);
+					        String gravedadStr = solicitarEntrada("\tGravedad (ej. estable): ", lector);
+					        int gravedadInt = ValidadorCamposUtils.traducirGravedad(gravedadStr);
 	
 					        String depto = solicitarEntrada("\tDepartamento: ", lector);
 					        ValidadorCamposUtils.validarDepartamento(depto);
@@ -130,7 +130,7 @@ public class RenderizadorConsola {
 					        String cama = solicitarEntrada("\tID Cama: ", lector);
 					        ValidadorCamposUtils.validarIdCama(cama);
 	
-					        controlador.registrarPaciente(rut, nombre, gravedad, depto, cama);
+					        controlador.registrarPaciente(rut, nombre, gravedadInt, depto, cama);
 					        System.out.println("\t-> Paciente registrado exitosamente.");
 	
 					    }
@@ -160,8 +160,9 @@ public class RenderizadorConsola {
 	
 					case "3":
 						try {
-							String gravedad = solicitarEntrada("\tIngrese gravedad a filtrar: ", lector);
-							String pacienteFiltrado = controlador.filtrarPorGravedad(gravedad);
+							String gravedadStr = solicitarEntrada("\tIngrese gravedad a filtrar: ", lector);
+							int gravedadInt = ValidadorCamposUtils.traducirGravedad(gravedadStr);
+							String pacienteFiltrado = controlador.filtrarPorGravedad(gravedadInt);
 							System.out.println(pacienteFiltrado);
 						}
 						catch(Exception e) {
