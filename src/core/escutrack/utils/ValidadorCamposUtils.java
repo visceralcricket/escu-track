@@ -24,6 +24,19 @@ package core.escutrack.utils;
  */
 public class ValidadorCamposUtils {
 
+    /**
+     * Diccionario compacto que traduce el nivel de gravedad numérico
+     * interno (usado como índice) a su representación textual. 
+     */
+	public static final String[] TRADUCTOR_GRAVEDAD = {
+		"indefinido", // índice 0
+		"estable",
+		"moderado",
+		"urgente",
+		"severo",
+		"critico"
+	};
+	
 	/**
 	 * Valida que el RUT tenga el formato {@code "12345678-9"} (sin puntos,
 	 * con guion y dígito verificador numérico o 'K'/'k').
@@ -66,14 +79,9 @@ public class ValidadorCamposUtils {
 	 * @param gravedad valor a validar
 	 * @throws IllegalArgumentException si la gravedad es nula, está vacía o no es una etiqueta reconocida
 	 */
-	public static void validarGravedad(String gravedad) throws IllegalArgumentException {
-	    if(gravedad == null || gravedad.trim().isEmpty()) {
-	        throw new IllegalArgumentException("\t[!] La gravedad no puede estar vacía.");
-	    }
-
-	    // (?i) hace que sea insensible a mayúsculas / minúsculas
-	    if(!gravedad.matches("^(?i)(estable|moderado|urgente|severo|critico)$")) {
-	        throw new IllegalArgumentException("\t[!] La gravedad debe ser: estable, moderado, urgente, severo o critico.");
+	public static void validarGravedad(int gravedad) throws IllegalArgumentException {
+	    if(gravedad < 0 || gravedad >= TRADUCTOR_GRAVEDAD.length) {
+	        throw new IllegalArgumentException("\t[!] Gravedad inválida. Ingrese un valor numérico entre 0 (indefinido) y 5 (crítico).");
 	    }
 	}
 
@@ -126,5 +134,30 @@ public class ValidadorCamposUtils {
 			throw new IllegalArgumentException("\t[!] Formato de prioridad no válido. Debe ser un número entero positivo mayor a cero.");
 		}
 	}
-
+	
+	public static int traducirGravedad(String gravedadTexto) throws IllegalArgumentException {
+		if(gravedadTexto == null || gravedadTexto.trim().isEmpty()) {
+			throw new IllegalArgumentException("\t[!] La gravedad no puede estar vacía.");
+		}
+		
+		String textoLimpio = gravedadTexto.trim().toLowerCase();
+		
+		// Iterar sobre diccionario para encontrar el índice que coincide
+		for (int i = 1; i < TRADUCTOR_GRAVEDAD.length; i++) {
+			if (TRADUCTOR_GRAVEDAD[i].equals(textoLimpio)) {
+				return i;
+			}
+		}
+		
+		throw new IllegalArgumentException("\t[!] La gravedad debe ser: estable, moderado, urgente, severo o critico.");
+	}
+	/*s
+	 * SOBRECARGA (Salida al Usuario): Recibe el índice numérico interno, 
+	 * lo valida, y retorna su formato textual desde el diccionario central.
+	 */
+	public static String traducirGravedad(int nivelGravedad) throws IllegalArgumentException {
+		validarGravedad(nivelGravedad);
+		return TRADUCTOR_GRAVEDAD[nivelGravedad];
+	}
+	
 }
