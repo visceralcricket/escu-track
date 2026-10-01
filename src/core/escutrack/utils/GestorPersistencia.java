@@ -66,11 +66,11 @@ public class GestorPersistencia {
                     if(!cama.isDisponible() && cama.getPaciente() != null) {
                         Paciente p = cama.getPaciente();
                         // parsear nivel de gravedad numérico a textual
-                        String gravedadTextual = Paciente.TRADUCTOR_GRAVEDAD[p.getNivelGravedad()];
+                        // ELIMINADO String gravedadTextual = Paciente.TRADUCTOR_GRAVEDAD[p.getNivelGravedad()];
 
                         linea.append(DELIMITADOR).append(p.getRut())
                              .append(DELIMITADOR).append(p.getNombre())
-                             .append(DELIMITADOR).append(gravedadTextual)
+                             .append(DELIMITADOR).append(p.getNivelGravedad())
                              .append(DELIMITADOR).append(p.getFechaIngreso().toString());
                     }
                     else {
@@ -119,7 +119,8 @@ public class GestorPersistencia {
     			if(ocupada && datos.length > 4 && !datos[4].isEmpty()) {
     				String rut = datos[4];
     				String nombre = datos[5];
-    				String gravedad = datos[6];
+    				// parseInt como verificación de seguridad.
+    				int gravedad = Integer.parseInt(datos[6]);
     				java.time.LocalDateTime fecha = java.time.LocalDateTime.parse(datos[7]);
 
     				Paciente paciente = new Paciente(rut, nombre, gravedad, fecha);

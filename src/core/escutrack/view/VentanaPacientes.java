@@ -30,9 +30,9 @@ public class VentanaPacientes extends JPanel {
 	            	if(nombre == null) return;
 	            	core.escutrack.utils.ValidadorCamposUtils.validarNombre(nombre);
 	            	
-	            	String gravedad = javax.swing.JOptionPane.showInputDialog(ventana, "Gravedad (ej. estable):");
-	            	if(gravedad == null) return;
-	            	core.escutrack.utils.ValidadorCamposUtils.validarGravedad(gravedad);
+	            	String gravedadStr = javax.swing.JOptionPane.showInputDialog(ventana, "Gravedad (ej. estable):");
+	            	if(gravedadStr == null) return;
+	            	int gravedadInt = ValidadorCamposUtils.traducirGravedad(gravedadStr);
 	            	
 	            	String depto = javax.swing.JOptionPane.showInputDialog(ventana, "Departamento:");
 	            	if(depto == null) return;
@@ -42,7 +42,7 @@ public class VentanaPacientes extends JPanel {
 	            	if(cama == null) return;
 	            	core.escutrack.utils.ValidadorCamposUtils.validarIdCama(cama);
 	            	
-	            	controlador.registrarPaciente(rut, nombre, gravedad, depto, cama);
+	            	controlador.registrarPaciente(rut, nombre, gravedadInt, depto, cama);
 	                javax.swing.JOptionPane.showMessageDialog(ventana, "Paciente registrado exitosamente.");
 	        	}
 	        	
@@ -87,11 +87,12 @@ public class VentanaPacientes extends JPanel {
 	    	public void actionPerformed(ActionEvent arg0) {
 	        	
 	        	try {
-	            	String gravedad = javax.swing.JOptionPane.showInputDialog(ventana, "Ingrese gravedad a filtrar:");
-	            	if(gravedad == null) return;
-	            	core.escutrack.utils.ValidadorCamposUtils.validarGravedad(gravedad);
-	            	
-	            	String pacientes = controlador.filtrarPorGravedad(gravedad);
+	        		String gravedadStr = javax.swing.JOptionPane.showInputDialog(ventana, "Ingrese gravedad a filtrar:");
+	        		if(gravedadStr == null) return;
+	        		
+	        		int gravedadInt = core.escutrack.utils.ValidadorCamposUtils.traducirGravedad(gravedadStr);
+	        		String pacientes = controlador.filtrarPorGravedad(gravedadInt);
+	        		
 	                javax.swing.JOptionPane.showMessageDialog(ventana, "--- PACIENTE ENCONTRADOS ---\n\n" + pacientes);
 	        	}
 	        	
@@ -121,11 +122,11 @@ public class VentanaPacientes extends JPanel {
 	            	if(nuevoNombre == null) return;
 	            	core.escutrack.utils.ValidadorCamposUtils.validarNombre(nuevoNombre);
 	            	
-					String nuevaGravedad = javax.swing.JOptionPane.showInputDialog(ventana, "Nueva gravedad:");
-	            	if(nuevaGravedad == null) return;
-	            	core.escutrack.utils.ValidadorCamposUtils.validarGravedad(nuevaGravedad);
+	            	String nuevaGravedadStr = javax.swing.JOptionPane.showInputDialog(ventana, "Nueva gravedad:");
+	            	if(nuevaGravedadStr == null) return;
+	            	int nuevaGravedadInt = core.escutrack.utils.ValidadorCamposUtils.traducirGravedad(nuevaGravedadStr);
 
-					controlador.editarPaciente(depto, cama, nuevoNombre, nuevaGravedad);
+					controlador.editarPaciente(depto, cama, nuevoNombre, nuevaGravedadInt);
 	                javax.swing.JOptionPane.showMessageDialog(ventana, "Paciente editado.");
 	        	}
 	    		catch(Exception e) {

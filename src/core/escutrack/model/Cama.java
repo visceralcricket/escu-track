@@ -1,5 +1,7 @@
 package core.escutrack.model;
 
+// Realizar verificaciones de parámetros recibidos
+import core.escutrack.utils.ValidadorCamposUtils;
 
 /**
  * Representa una cama de hospital dentro de un departamento.
@@ -28,6 +30,10 @@ public class Cama extends EntidadHospitalaria {
 	 */
 	public Cama(String idCama, boolean disponible, Paciente pacienteActual, int prioridad)
 	{
+		ValidadorCamposUtils.validarIdCama(idCama);
+		// Realizar casting de prioridad a String para validar
+		ValidadorCamposUtils.validarPrioridadCama(String.valueOf(prioridad));
+		
 		this.idCama = idCama;
 		this.disponible = disponible;
 		this.pacienteActual = pacienteActual;
@@ -111,7 +117,10 @@ public class Cama extends EntidadHospitalaria {
 	/** @return el identificador de la cama */
 	public String getIdCama() {return idCama;}
 	/** @param idCama nuevo identificador de la cama */
-	public void setIdCama(String idCama) {this.idCama = idCama;}
+	public void setIdCama(String idCama) {
+		ValidadorCamposUtils.validarIdCama(idCama);
+		this.idCama = idCama;
+		}
 
 	/** @return {@code true} si la cama está libre, {@code false} si está ocupada */
 	public boolean isDisponible() {return disponible;}
@@ -121,5 +130,8 @@ public class Cama extends EntidadHospitalaria {
 	/** @return el nivel de prioridad de la cama */
 	public int getPrioridad() {return prioridad;}
 	/** @param prioridad nuevo nivel de prioridad de la cama */
-	public void setPrioridad(int prioridad) {this.prioridad = prioridad;}
+	public void setPrioridad(int prioridad) {
+		ValidadorCamposUtils.validarPrioridadCama(String.valueOf(prioridad));
+		this.prioridad = prioridad;
+		}
 }
