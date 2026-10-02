@@ -345,7 +345,7 @@ public class ControladorHospital {
 		// No se puede eliminar paciente de cama que está vacía
 		if(cama.isDisponible()) throw new EntidadNoEncontradaException("La cama ya está vacía.");
 
-		cama.liberarCama(); // versión sin argumentos de setPaciente: limpia paciente y marca disponible = true
+		cama.liberarCama(); // limpia paciente y marca disponible = true
 	}
 
 	/**

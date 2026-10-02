@@ -101,7 +101,6 @@ public class Cama extends EntidadHospitalaria {
 	}
 
 	/**
-	 * Sobrecarga (SIA-5)
 	 * Da de alta al paciente actual, liberando la cama para nuevos ingresos.
 	 */
 	public void liberarCama() {

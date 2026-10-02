@@ -1,7 +1,7 @@
 package core.escutrack.utils;
 
 /* +++
- * Módulo de utilidad cuyo único propósito es validar
+ * Módulo de utilidad cuyo propósito es validar
  * cada parámetro tratado por el programa de tal forma
  * que NO permita ingresar información que no tiene un
  * formato válido y a la vez garantice el cumplimiento

@@ -33,7 +33,7 @@ public class Paciente extends EntidadHospitalaria {
 	 *
 	 * @param rut           RUT del paciente
 	 * @param nombre        nombre completo del paciente
-	 * @param gradoGravedad nivel de gravedad en formato textual (ej. "estable"); ver {@link #TRADUCTOR_GRAVEDAD}
+	 * @param nivelGravedad nivel de gravedad en formato entero traducido de la forma textual ingresada por el usuario (ej. "estable" -> 1); ver {@link #TRADUCTOR_GRAVEDAD}
 	 * @param fechaIngreso  fecha y hora en que el paciente ingresó al establecimiento
 	 * @throws IllegalArgumentException si {@code gradoGravedad} no corresponde a un valor reconocido
 	 */
