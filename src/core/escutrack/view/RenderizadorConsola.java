@@ -89,8 +89,9 @@ public class RenderizadorConsola {
 
 	/**
 	 * Dibuja y controla el submenú de gestión de pacientes: registrar un
-	 * nuevo paciente, mostrar un paciente específico o filtrar pacientes
-	 * por gravedad. El menú se repite hasta que el usuario elige volver.
+	 * nuevo paciente, mostrar un paciente específico, filtrar pacientes
+	 * por gravedad, editar un paciente o darlo de alta. El menú se repite
+	 * hasta que el usuario elige volver.
 	 *
 	 * @param lector      lector de entrada estándar ya abierto
 	 * @param controlador controlador con la lógica de negocio del hospital
@@ -104,12 +105,14 @@ public class RenderizadorConsola {
 			"\t1. Registrar nuevo Paciente\n" +
 			"\t2. Mostrar Paciente específico/a\n" +
 			"\t3. Filtrar Pacientes por gravedad\n" +
-			"\t4. Salir\n\n" +
+			"\t4. Editar Paciente\n" +
+			"\t5. Dar de alta (Eliminar) Paciente\n" +
+			"\t6. Volver al menú principal\n\n" +
 			"Seleccione una opción:";
 
 			String opcion = solicitarEntrada(mainMenu, lector);
-			// Si cancela el menú, sale del programa
-			if(opcion == null) opcion = "3";
+			// Si se cierra el flujo de entrada, vuelve al menú principal
+			if(opcion == null) opcion = "6";
 			try {
 				switch(opcion) {
 					case "1":
@@ -171,6 +174,46 @@ public class RenderizadorConsola {
 						break;
 	
 					case "4":
+						System.out.println("\n\t| -- EDICIÓN DE PACIENTE -- |");
+						try {
+							String depto = solicitarEntrada("\tDepartamento: ", lector);
+							ValidadorCamposUtils.validarDepartamento(depto);
+
+							String cama = solicitarEntrada("\tID Cama: ", lector);
+							ValidadorCamposUtils.validarIdCama(cama);
+
+							String nuevoNombre = solicitarEntrada("\tNuevo nombre: ", lector);
+							ValidadorCamposUtils.validarNombre(nuevoNombre);
+
+							String nuevaGravedadStr = solicitarEntrada("\tNueva gravedad (ej. estable): ", lector);
+							int nuevaGravedadInt = ValidadorCamposUtils.traducirGravedad(nuevaGravedadStr);
+
+							controlador.editarPaciente(depto, cama, nuevoNombre, nuevaGravedadInt);
+							System.out.println("\t-> Paciente editado exitosamente.");
+						}
+						catch(Exception e) {
+							System.out.println("\n\t[ERROR DE EDICIÓN]: " + e.getMessage());
+						}
+						break;
+
+					case "5":
+						System.out.println("\n\t| -- ALTA DE PACIENTE -- |");
+						try {
+							String depto = solicitarEntrada("\tDepartamento: ", lector);
+							ValidadorCamposUtils.validarDepartamento(depto);
+
+							String cama = solicitarEntrada("\tID Cama del paciente a dar de alta: ", lector);
+							ValidadorCamposUtils.validarIdCama(cama);
+
+							controlador.eliminarPaciente(cama, depto);
+							System.out.println("\t-> Paciente dado de alta (eliminado).");
+						}
+						catch(Exception e) {
+							System.out.println("\n\t[ERROR DE ALTA]: " + e.getMessage());
+						}
+						break;
+
+					case "6":
 						System.out.println("Volviendo al menú principal...");
 						enMenu = false;
 						break;
@@ -188,8 +231,8 @@ public class RenderizadorConsola {
 
 	/**
 	 * Dibuja y controla el submenú de gestión de departamentos: agregar,
-	 * mostrar o eliminar departamentos. El menú se repite hasta que el
-	 * usuario elige volver.
+	 * mostrar, buscar, editar o eliminar departamentos. El menú se repite
+	 * hasta que el usuario elige volver.
 	 *
 	 * @param lector      lector de entrada estándar ya abierto
 	 * @param controlador controlador con la lógica de negocio del hospital
@@ -208,6 +251,8 @@ public class RenderizadorConsola {
 			"Opción: ";
 
 			String opcion = solicitarEntrada(menu, lector);
+			// Si se cierra el flujo de entrada, vuelve al menú principal (evita NullPointerException en el switch)
+			if(opcion == null) opcion = "6";
 			try {
 				switch(opcion) {
 					case "1":
@@ -282,8 +327,9 @@ public class RenderizadorConsola {
 
 	/**
 	 * Dibuja y controla el submenú de gestión de camas: agregar una cama a
-	 * un departamento, mostrar las camas de un departamento o eliminar una
-	 * cama por su ID. El menú se repite hasta que el usuario elige volver.
+	 * un departamento, mostrar las camas de un departamento, buscar, editar
+	 * o eliminar una cama por su ID. El menú se repite hasta que el usuario
+	 * elige volver.
 	 *
 	 * @param lector      lector de entrada estándar ya abierto
 	 * @param controlador controlador con la lógica de negocio del hospital
@@ -302,6 +348,8 @@ public class RenderizadorConsola {
 			"Opción: ";
 
 			String opcion = solicitarEntrada(menu, lector);
+			// Si se cierra el flujo de entrada, vuelve al menú principal (evita NullPointerException en el switch)
+			if(opcion == null) opcion = "6";
 			try {
 				switch(opcion) {
 					case "1":

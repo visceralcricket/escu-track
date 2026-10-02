@@ -15,18 +15,17 @@ import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-// Utilidades: cargar base datos archivo CSV y validar parámetros recibidos.
-import core.escutrack.utils.GestorPersistencia;
+// Utilidades: validar parámetros recibidos (la carga/guardado CSV usa GestorPersistencia, importado arriba).
 import core.escutrack.utils.ValidadorCamposUtils;
 
 /* +++
  * @apiNote
  *
- * Este módulo busca enlazar la entidad Paciente con una metodología de
- * front-end para que sea más fácil para el usuario interactuar con el programa y
- * hacer distintas operaciones, haciendo uso de dos Mapas para llevar registro
- * de todos los pacientes de acuerdo al departamento en el que se encuentran
- * presentes dentro del hospital.
+ * Este módulo enlaza las entidades del modelo (departamentos, camas y
+ * pacientes) con los dos front-ends del programa (Modo Consola y Modo
+ * Ventana), de modo que ambos comparten exactamente la misma lógica de
+ * negocio. Para ello usa un único mapa anidado (departamento -> idCama ->
+ * Cama), donde cada cama puede tener asignado un paciente.
  *
  * @since v0.1.3
  * @author Felipe T.S *
@@ -288,7 +287,7 @@ public class ControladorHospital {
 	 *
 	 * @param rut           RUT del paciente
 	 * @param nombre        nombre completo del paciente
-	 * @param gradoGravedad nivel de gravedad en formato textual (ej. "estable")
+	 * @param nivelGravedad nivel de gravedad numérico (obtenido con {@link ValidadorCamposUtils#traducirGravedad(String)})
 	 * @param departamento  nombre del departamento donde se encuentra la cama
 	 * @param idCama        identificador de la cama a asignar
 	 * @param fechaIngreso  fecha y hora de ingreso del paciente
@@ -313,12 +312,12 @@ public class ControladorHospital {
 	}
 
 	/**
-	 * Sobrecarga (SIA-5) de {@link #registrarPaciente(String, String, String, String, String, LocalDateTime)}
+	 * Sobrecarga (SIA-5) de {@link #registrarPaciente(String, String, int, String, String, LocalDateTime)}
 	 * que asume como fecha de ingreso el instante actual.
 	 *
 	 * @param rut           RUT del paciente
 	 * @param nombre        nombre completo del paciente
-	 * @param gradoGravedad nivel de gravedad en formato textual (ej. "estable")
+	 * @param nivelGravedad nivel de gravedad numérico (obtenido con {@link ValidadorCamposUtils#traducirGravedad(String)})
 	 * @param departamento  nombre del departamento donde se encuentra la cama
 	 * @param idCama        identificador de la cama a asignar
 	 * @throws EntidadNoEncontradaException si el departamento o la cama no existen
@@ -373,7 +372,14 @@ public class ControladorHospital {
 		
 		return "--- " + estadoOperativo + " ---\n" + paciente.toString();
 	}
-	// Búsqueda específica de un departamento (SIA-8)
+	/**
+	 * Búsqueda específica de un departamento (SIA-8): entrega su nombre y
+	 * la cantidad de camas registradas en él.
+	 *
+	 * @param nombreDepto nombre del departamento a buscar
+	 * @return resumen textual del departamento
+	 * @throws EntidadNoEncontradaException si el departamento no existe
+	 */
 	public String buscarDepartamento(String nombreDepto) throws EntidadNoEncontradaException {
 		Map<String, Cama> camas = this.mapaDepartamentos.get(nombreDepto);
 		if(camas == null) throw new EntidadNoEncontradaException("Departamento inexistente.");
@@ -381,7 +387,15 @@ public class ControladorHospital {
 		return "Departamento: " + nombreDepto + "\nTotal camas registradas: " + camas.size();
 	}
 	
-	// Búsqueda específica de una Cama (SIA-8)
+	/**
+	 * Búsqueda específica de una cama (SIA-8): entrega su estado operativo
+	 * (lógica polimórfica de {@code EntidadHospitalaria}) y su detalle.
+	 *
+	 * @param nombreDepto nombre del departamento dueño de la cama
+	 * @param idCama      identificador de la cama a buscar
+	 * @return estado operativo y detalle de la cama, generado por {@link Cama#toString()}
+	 * @throws EntidadNoEncontradaException si el departamento o la cama no existen
+	 */
 	public String buscarCama(String nombreDepto, String idCama) throws EntidadNoEncontradaException {
 		Map<String, Cama> camas = this.mapaDepartamentos.get(nombreDepto);
 		if(camas == null) throw new EntidadNoEncontradaException("Departamento inexistente.");
@@ -394,7 +408,16 @@ public class ControladorHospital {
 		return "--- " + estadoOperativo + " ---\n" + cama.toString();
 	}
 	
-	// Editar los datos de un paciente ya registrado (SIA-8)
+	/**
+	 * Edita los datos de un paciente ya registrado (SIA-8), ubicándolo por
+	 * la cama que tiene asignada: actualiza su nombre y su nivel de gravedad.
+	 *
+	 * @param depto         nombre del departamento dueño de la cama
+	 * @param idCama        identificador de la cama del paciente
+	 * @param nuevoNombre   nuevo nombre completo del paciente
+	 * @param nivelGravedad nuevo nivel de gravedad numérico (obtenido con {@link ValidadorCamposUtils#traducirGravedad(String)})
+	 * @throws EntidadNoEncontradaException si el departamento o la cama no existen, o si la cama no tiene paciente asignado
+	 */
 	public void editarPaciente(String depto, String idCama, String nuevoNombre, int nivelGravedad) throws EntidadNoEncontradaException {
 		Map<String, Cama> camas = this.mapaDepartamentos.get(depto);
 		if(camas == null) throw new EntidadNoEncontradaException("Departamento inexistente.");
@@ -412,7 +435,7 @@ public class ControladorHospital {
 	 *
 	 * @param idCama        identificador de la cama del paciente
 	 * @param departamento  nombre del departamento dueño de la cama
-	 * @param nuevaGravedad nueva gravedad en formato textual (ej. "urgente")
+	 * @param nuevaGravedad nuevo nivel de gravedad numérico (obtenido con {@link ValidadorCamposUtils#traducirGravedad(String)})
 	 * @throws EntidadNoEncontradaException si el departamento no existe
 	 * @throws CamaOcupadaException         declarada por firma; no se lanza en la implementación actual
 	 * @throws IllegalArgumentException     si el ID de cama no es válido dentro del departamento
@@ -435,7 +458,7 @@ public class ControladorHospital {
 	 * de todos los pacientes cuyo nivel de gravedad coincida con el
 	 * indicado.
 	 *
-	 * @param gravedad etiqueta textual de gravedad a filtrar (ej. "critico")
+	 * @param gravedad nivel de gravedad numérico a filtrar (obtenido con {@link ValidadorCamposUtils#traducirGravedad(String)})
 	 * @return listado con el departamento y el detalle de cada paciente que coincide, o un mensaje si no se encontró ninguno
 	 * @throws EntidadNoEncontradaException si algún departamento del mapa interno no pudo resolverse (caso excepcional)
 	 */
@@ -489,4 +512,4 @@ public class ControladorHospital {
 	public void apagarSistema() throws IOException {
 		GestorPersistencia.guardarDatos(this.mapaDepartamentos);
 	}
-}
+}

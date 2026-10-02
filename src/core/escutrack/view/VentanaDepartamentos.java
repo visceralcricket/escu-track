@@ -55,7 +55,7 @@ public class VentanaDepartamentos extends JPanel {
 	    add(btnMostrar);
 	    
 	    /*
-	     * Botones de funcionalidades faltantes.
+	     * Botones de buscar y editar departamento.
 	     * 
 	     * @since v0.2.3
 	     * @author Felipe T.S.

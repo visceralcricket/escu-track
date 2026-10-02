@@ -14,7 +14,7 @@ import java.awt.event.ActionEvent;
  * 
  * Se detectaron errores al intentar abrir este código fuente en modo Diseño
  * con WindowBuilder y, aparentemente, es debido a cómo el parseador del
- * plugin analiza la sintaxis de llamas a métodos anidados como 'initialize'.
+ * plugin analiza la sintaxis de llamadas a métodos anidados como 'initialize'.
  * Por esta necesidad de poder abrir la ventana en modo Diseño para continuar
  * su desarrollo, se decidió hacer uso de CardLayout para mitigar el problema.
  * 

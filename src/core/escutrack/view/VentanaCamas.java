@@ -91,7 +91,7 @@ public class VentanaCamas extends JPanel {
 	    });
 	    add(btnBuscar);
 	    /*
-	     * Funcionalidades faltantes de buscar y editar cama.
+	     * Funcionalidades de buscar y editar cama.
 	     * 
 	     * @since v0.2.3
 	     * @author Felipe T.S.
