@@ -67,7 +67,7 @@ public class RenderizadorConsola {
 				}
 			}
 			finally {
-				System.out.println("\n\n\n\n\n\n\n\n\n\n");
+				System.out.println("\n\n\n\n\n");
 			}
 		} // bucle principal consola
 	}
@@ -224,7 +224,7 @@ public class RenderizadorConsola {
 				} // fin switch-cases
 			}
 			finally {
-				System.out.println("\n\n\n\n\n\n\n\n\n\n");
+				System.out.println("\n\n\n\n\n");
 			}
 		}
 	}
@@ -320,7 +320,7 @@ public class RenderizadorConsola {
 				} // fin switch-cases
 			}
 			finally {
-				System.out.println("\n\n\n\n\n\n\n\n\n\n");
+				System.out.println("\n\n\n\n\n");
 			}
 		}
 	}
@@ -445,7 +445,7 @@ public class RenderizadorConsola {
 				} // fin switch-cases
 			}
 			finally {
-				System.out.println("\n\n\n\n\n\n\n\n\n\n");
+				System.out.println("\n\n\n\n\n");
 			}
 		}
 	}
