@@ -10,7 +10,7 @@ import core.escutrack.utils.ValidadorCamposUtils;
  * prioridad numérica, un estado de disponibilidad y, opcionalmente, un
  * {@link Paciente} asignado. Cuando una cama pasa a estar ocupada, su
  * disponibilidad se actualiza automáticamente a través de
- * {@link #setPaciente(Paciente)} y {@link #setPaciente()}.
+ * {@link #setPaciente(Paciente)} y {@link #setPaciente(Paciente)}.
  *
  * @author Felipe T.S.
  */

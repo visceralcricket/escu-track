@@ -33,7 +33,7 @@ public class Paciente extends EntidadHospitalaria {
 	 *
 	 * @param rut           RUT del paciente
 	 * @param nombre        nombre completo del paciente
-	 * @param nivelGravedad nivel de gravedad en formato entero traducido de la forma textual ingresada por el usuario (ej. "estable" -> 1); ver {@link #TRADUCTOR_GRAVEDAD}
+	 * @param nivelGravedad nivel de gravedad en formato entero traducido de la forma textual ingresada por el usuario (ej. "estable" = 1); ver {@link core.escutrack.utils.ValidadorCamposUtils#TRADUCTOR_GRAVEDAD}
 	 * @param fechaIngreso  fecha y hora en que el paciente ingresó al establecimiento
 	 * @throws IllegalArgumentException si {@code gradoGravedad} no corresponde a un valor reconocido
 	 */
@@ -144,7 +144,7 @@ public class Paciente extends EntidadHospitalaria {
 	/** @return el nivel de gravedad del paciente, como valor entero interno */
 	public int getNivelGravedad() {return nivelGravedad;}
 	/**
-	 * @param gradoGravedad nuevo nivel de gravedad en formato textual (ej. "critico")
+	 * @param nivelGravedad nuevo nivel de gravedad en formato textual (ej. "critico")
 	 * @throws IllegalArgumentException si la etiqueta no corresponde a ningún valor reconocido
 	 */
 	public void setNivelGravedad(int nivelGravedad) {

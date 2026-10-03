@@ -12,7 +12,7 @@ import core.escutrack.utils.ValidadorCamposUtils;
  * {@link ControladorHospital}, sin acceder directamente a las estructuras
  * de datos del hospital.
  * 
- * @implNote
+ * Nota de implementación: 
  * Se envolvieron los bloques switch-case de los renderizadores en try-finally's
  * para imprimir 10 líneas en blanco al ser ejecutar cualquier acción por el
  * programa, ya sea escoger una opción, dar una opción inválida, etc. Esto
